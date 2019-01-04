@@ -1,0 +1,65 @@
+{:duct.profile/base
+ {:duct.core/project-ns graphql-server
+
+  :graphql-server/auth
+  {:code-cache-expire #duct/env ["CODE_CACHE_EXPIRE" Int :or 600000]
+   :token-cache-expire #duct/env ["TOKEN_CACHE_EXPIRE" Int :or 600000]
+   :refresh-token-cache-expire #duct/env ["REFRESH_TOKEN_CACHE_EXPIRE" Int :or 600000]}
+
+  :duct.server/pedestal {:base-service #ig/ref :graphql-server.lacinia/service
+                         :service {:io.pedestal.http/port #duct/env ["PORT" Int :or 8080]}}
+
+  :graphql-server.lacinia/schema {}
+  :graphql-server.lacinia/service
+  {:options {:graphiql true :subscriptions true}
+   :interceptors [#ig/ref :graphql-server.interceptor/check-context
+                  ;;#ig/ref :graphql-server.interceptor/auth
+                  ]
+   :routes
+   [["/login"      :get  [#ig/ref :graphql-server.handler.auth/login-page] :route-name :login-page]
+    ["/login"      :post [#ig/ref :graphql-server.interceptor/body-params
+                          #ig/ref :graphql-server.handler.auth/login] :route-name :login]
+    ["/token"      :post [#ig/ref :graphql-server.handler.auth/token] :route-name :token]
+    ["/introspect" :get  [#ig/ref :graphql-server.handler.auth/introspect] :route-name :introspect]]
+   :schema #ig/ref :graphql-server.lacinia/schema}
+
+  :graphql-server.interceptor/body-params {}
+  :graphql-server.interceptor/auth {:auth #ig/ref :graphql-server/auth}
+  :graphql-server.interceptor/check-context {}
+
+  :graphql-server.handler.auth/login-page {}
+  :graphql-server.handler.auth/login {:auth #ig/ref :graphql-server/auth
+                                      :db #ig/ref :duct.database/sql}
+  :graphql-server.handler.auth/token {:auth #ig/ref :graphql-server/auth
+                                      :db #ig/ref :duct.database/sql}
+  :graphql-server.handler.auth/introspect {:auth #ig/ref :graphql-server/auth
+                                           :db #ig/ref :duct.database/sql}
+
+  [:duct.migrator.ragtime/sql :graphql-server.migration/ddl-20190101-00-add-user]
+  {:up ["CREATE TABLE \"user\" (
+          id SERIAL PRIMARY KEY,
+          email_address varchar unique not null,
+          password varchar not null)"]
+   :down ["DROP TABLE \"user\""]}
+
+  [:duct.migrator.ragtime/sql :graphql-server.migration/ddl-20190101-01-add-client]
+  {:up ["CREATE TABLE client (
+          client_id varchar,
+          client_secret varchar,
+          client_type varchar,
+          redirect_uris varchar,
+          application_name varchar,
+          application_type varchar)"]
+   :down ["DROP TABLE client"]}
+  :duct.migrator/ragtime
+  {:migrations [#ig/ref :graphql-server.migration/ddl-20190101-00-add-user
+                #ig/ref :graphql-server.migration/ddl-20190101-01-add-client]}}
+
+ :duct.profile/dev   #duct/include "dev"
+ :duct.profile/local #duct/include "local"
+ :duct.profile/prod  {}
+
+ :duct.module/logging {}
+ :duct.module.web/api {}
+ :duct.module/sql {}
+ :duct.module/pedestal {}}

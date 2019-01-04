@@ -1,0 +1,2 @@
+{:duct.database/sql
+ {:connection-uri "jdbc:postgresql://localhost:5432/graphql_server?user=postgres&password=tisus"}}
