@@ -1,18 +1,9 @@
 (ns graphql-server.visualizer
   (:require [hodur-engine.core :as engine]
-            [hodur-visualizer-schema.core :as visualizer]))
+            [hodur-visualizer-schema.core :as visualizer])
+  (:require-macros [graphql-server.macro :refer [read-schema]]))
 
-(def meta-db
-  (engine/init-schema
-   '[Person
-     [^String first-name
-      ^String last-name
-      ^Gender gender]
-
-     ^:enum
-     Gender
-     [MALE FEMALE IRRELEVANT]]))
-
-(-> meta-db
+(-> (read-schema "graphql_server/schema.edn")
+    engine/init-schema
     visualizer/schema
     visualizer/apply-diagram!)

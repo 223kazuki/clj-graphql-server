@@ -1,4 +1,9 @@
 [^{:lacinia/tag-recursive true}
  Person
  [^String first-name
-  ^String last-name]]
+  ^String last-name
+  ^Gender gender]
+
+ ^:enum
+ Gender
+ [MALE FEMALE IRRELEVANT]]
