@@ -15,6 +15,16 @@ lein duct setup
 This will create files for local configuration, and prep your system
 for the project.
 
+#### Schema visualization
+
+In dev profile, schma difined in edn file will be visualized by [hodur-visualizer-schema](https://github.com/luchiniatwork/hodur-visualizer-schema).
+Then you need [GoJS](https://gojs.net/latest/index.html)
+
+```sh
+$ mkdir -p resources/public/scripts
+$ curl https://gojs.net/latest/release/go.js -o resources/public/scripts/go.js
+```
+
 ### Environment
 
 To begin developing, start with a REPL.
