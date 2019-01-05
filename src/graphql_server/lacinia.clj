@@ -37,10 +37,10 @@
                :appears_in {:type (list :episode)}}}}
 
     :subscriptions
-    {:droids
-     {:type :droid
+    {:hero
+     {:type :human
       :args {:name {:type String}}
-      :stream :stream-droids}}
+      :stream :stream-hero}}
 
     :queries
     {:hero {:type (non-null :human)
@@ -50,10 +50,12 @@
              :args {:id {:type String :default-value "2001"}}
              :resolve :get-droid}}})
 
-(defn droid-streamer
+(defn hero-streamer
   [context args source-stream]
+  (println context)
+  (println "start!")
   ;; Create an object for the subscription.
-  (source-stream nil)
+  (source-stream {:id 12121 :name "aaa"})
   #_(let [subscription (create-log-subscription)]
       (on-publish subscription
                   (fn [log-event]
@@ -67,7 +69,7 @@
   (-> schema
       (attach-resolvers {:get-hero get-hero
                          :get-droid (constantly {})})
-      (attach-streamers {:stream-droids droid-streamer})
+      (attach-streamers {:stream-hero hero-streamer})
       schema/compile))
 
 (defmethod ig/init-key ::service

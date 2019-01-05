@@ -87,7 +87,7 @@
   (fn [_]
     (login-form nil)))
 
-(defmethod ig/init-key ::login [_ {:keys [db cache]}]
+(defmethod ig/init-key ::login [_ {:keys [db auth]}]
   (fn [{:keys [:params :form-params] :as req}]
     (let [{:keys [:response_type :client_id :redirect_uri :scope state]} params
           {:keys [:username :password]} form-params
@@ -106,14 +106,14 @@
               (login-form {:error "Invalid username or password." :form {:username username}})
 
               :else
-              (let [code (auth/new-code cache {:client_id client_id
-                                               :redirect_uri ((-> client
-                                                                  :redirect_uris
-                                                                  (clojure.string/split #" ")
-                                                                  set) redirect_uri)
-                                               :explicit-redirect-uri? explicit-redirect-uri?
-                                               :scope scope
-                                               :user (select-keys user [:id :email_address])})]
+              (let [code (auth/new-code auth {:client_id client_id
+                                              :redirect_uri ((-> client
+                                                                 :redirect_uris
+                                                                 (clojure.string/split #" ")
+                                                                 set) redirect_uri)
+                                              :explicit-redirect-uri? explicit-redirect-uri?
+                                              :scope scope
+                                              :user (select-keys user [:id :email_address])})]
                 {:status 302 :headers {"Location" (format "%s?code=%s&state=%s" redirect_uri code state)}}))
 
             "token"
@@ -122,17 +122,17 @@
               (login-form {:error "Invalid username or password." :form {:username username}})
 
               :else
-              (let [code (auth/new-code cache {:client_id client_id
-                                               :redirect_uri ((-> client
-                                                                  :redirect_uris
-                                                                  (clojure.string/split #" ")
-                                                                  set) redirect_uri)
-                                               :explicit-redirect-uri? explicit-redirect-uri?
-                                               :scope scope
-                                               :user (select-keys user [:id :email_address])})]
+              (let [code (auth/new-code auth {:client_id client_id
+                                              :redirect_uri ((-> client
+                                                                 :redirect_uris
+                                                                 (clojure.string/split #" ")
+                                                                 set) redirect_uri)
+                                              :explicit-redirect-uri? explicit-redirect-uri?
+                                              :scope scope
+                                              :user (select-keys user [:id :email_address])})]
                 (if-let [access-token (and (db/find-client-by-id db client_id)
-                                           (auth/new-token cache code client_id redirect_uri))]
-                  (let [{:keys [token-type expires-in client]} (auth/get-auth cache access-token)]
+                                           (auth/new-token auth code client_id redirect_uri))]
+                  (let [{:keys [token-type expires-in client]} (auth/get-auth auth access-token)]
                     {:status 302 :headers {"Location" (format "%s?access_token=%s&token_type=%s&expires_in=%s&scope=%s&state=%s"
                                                               redirect-uri
                                                               access-token
@@ -144,14 +144,14 @@
             (authorization-error-response redirect_uri "unsupported_response_type" state)))
         (login-form {:error "Invalid application." :username username})))))
 
-(defmethod ig/init-key ::token [_ {:keys [db cache]}]
+(defmethod ig/init-key ::token [_ {:keys [db auth]}]
   (fn [{:keys [:params] :as req}]
     (let [{:keys [grant_type code redirect_uri client_id refresh_token]} params]
       (case grant_type
         "authorization_code"
         (if-let [access-token (and (db/find-client-by-id db client_id)
-                                   (auth/new-token cache code client_id redirect_uri))]
-          (let [{:keys [token-type expires-in refresh-token]} (auth/get-auth cache access-token)]
+                                   (auth/new-token auth code client_id redirect_uri))]
+          (let [{:keys [token-type expires-in refresh-token]} (auth/get-auth auth access-token)]
             {:status 200 :body (json/write-str {:access_token  access-token
                                                 :token_type    token-type
                                                 :expires_in    expires-in
@@ -168,8 +168,8 @@
           {:status 400 :body "invalid_scope"}
 
           :else
-          (if-let [access-token (auth/update-token cache refresh_token)]
-            (let [{:keys [token-type expires-in refresh-token]} (auth/get-auth cache access-token)]
+          (if-let [access-token (auth/update-token auth refresh_token)]
+            (let [{:keys [token-type expires-in refresh-token]} (auth/get-auth auth access-token)]
               {:status 200
                :body (json/write-str
                       {:access_token  access-token
@@ -179,10 +179,10 @@
             {:status 400 :body "invalid_grant"}))
         {:status 400 :body "unsupported_grant_type"}))))
 
-(defmethod ig/init-key ::introspect [_ {:keys [db cache]}]
+(defmethod ig/init-key ::introspect [_ {:keys [db auth]}]
   (fn [{:keys [:params] :as req}]
     (let [{:keys [token token_type_hint]} params
-          {:keys [client] :as token-info} (auth/get-auth cache token)]
+          {:keys [client] :as token-info} (auth/get-auth auth token)]
       {:status 200 :body (json/write-str {:active     (some? token-info)
                                           :scope      (:scope client)
                                           :client_id  (:client_id client)

@@ -12,3 +12,5 @@ pom.xml.asc
 /profiles.clj
 /dev/resources/local.edn
 /dev/src/local.clj
+/resources/public/scripts
+/resources/public/cljs-out
