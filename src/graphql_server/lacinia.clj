@@ -5,7 +5,8 @@
             [com.walmartlabs.lacinia.util :refer [attach-resolvers attach-streamers]]
             [com.walmartlabs.lacinia.schema :as schema]
             [hodur-engine.core :as engine]
-            [hodur-lacinia-schema.core :as hodur-lacinia]))
+            [hodur-lacinia-schema.core :as hodur-lacinia]
+            [io.pedestal.http.cors :refer [allow-origin]]))
 
 (defn get-hero [context arguments value]
   (let [{:keys [episode]} arguments]
@@ -24,7 +25,7 @@
   (println context)
   (println "start!")
   ;; Create an object for the subscription.
-  (source-stream {:id 12121 :name "aaa"})
+  (source-stream {:id 12121 :name "Test"})
   #_(let [subscription (create-log-subscription)]
       (on-publish subscription
                   (fn [log-event]
@@ -34,7 +35,6 @@
   #(println "stop!"))
 
 (defmethod ig/init-key ::schema [_ {:keys [:meta-db]}]
-  (clojure.pprint/pprint (hodur-lacinia/schema meta-db))
   (-> meta-db
       hodur-lacinia/schema
       (attach-resolvers {:get-hero get-hero
@@ -44,12 +44,18 @@
 
 (defmethod ig/init-key ::service
   [_ {:keys [:schema :options :routes :interceptors]}]
-  (let [routes (->> (lacinia/graphql-routes schema options)
+  (let [cors-interceptor (allow-origin {:allowed-origins some?
+                                        :creds true})
+        preflight-route ["/graphql" :options (fn [req] {:status 200})
+                         :route-name ::preflight]
+        routes (->> (lacinia/graphql-routes schema options)
                     (concat routes)
+                    (cons preflight-route)
                     set
                     route/expand-routes
                     (map (fn [route]
-                           (update-in route [:interceptors]
-                                      #(into [] (concat interceptors %))))))
-        service (lacinia/service-map schema (assoc options :routes routes))]
-    service))
+                           (-> route
+                               (update-in [:interceptors] (partial cons cors-interceptor))
+                               (update-in [:interceptors]
+                                          #(into [] (concat interceptors %)))))))]
+    (lacinia/service-map schema (assoc options :routes routes))))
