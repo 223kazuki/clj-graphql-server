@@ -64,8 +64,8 @@
       #(stop-log-subscription subscription))
   #(println "stop!"))
 
-(defmethod ig/init-key ::schema
-  [_ options]
+(defmethod ig/init-key ::schema [_ {:keys [:meta-db]}]
+  (println (hodur-lacinia/schema meta-db))
   (-> schema
       (attach-resolvers {:get-hero get-hero
                          :get-droid (constantly {})})

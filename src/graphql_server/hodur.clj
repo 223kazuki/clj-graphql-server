@@ -5,5 +5,4 @@
 (defmethod ig/init-key :graphql-server/hodur [_ {:keys [:schema]}]
   #_ (binding [*print-meta* true]
        (pr schema))
-  (let [meta-db (hodur/init-schema schema)]
-    meta-db))
+  (hodur/init-schema schema))

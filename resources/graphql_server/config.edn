@@ -11,7 +11,7 @@
   :duct.server/pedestal {:base-service #ig/ref :graphql-server.lacinia/service
                          :service {:io.pedestal.http/port #duct/env ["PORT" Int :or 8080]}}
 
-  :graphql-server.lacinia/schema {}
+  :graphql-server.lacinia/schema {:meta-db #ig/ref :graphql-server/hodur}
   :graphql-server.lacinia/service
   {:options {:graphiql true :subscriptions true}
    :interceptors [#ig/ref :graphql-server.interceptor/check-context
