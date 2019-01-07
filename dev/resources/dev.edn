@@ -1,7 +1,7 @@
 {:duct.database/sql
  {:connection-uri "jdbc:postgresql://localhost:5432/graphql_server?user=postgres&password=tisus"}
 
- :graphql-server/visualizer-schema {}
+ :graphql-server/visualizer-schema {:schema #duct/include "graphql_server/schema"}
 
  :duct.migrator/ragtime
  {:migrations [#ig/ref :tis-checkout-api.migration/test-data]}

@@ -11,14 +11,15 @@
               :config {:watch-dirs ["dev/src" "resources/graphql_server"]
                        :mode :serve}}))
 
-(defmethod ig/suspend-key! :graphql-server/visualizer-schema [_ _]
-  (.setLastModified (io/file "dev/src/graphql_server/visualizer.cljs")
-                    (System/currentTimeMillis))
-  (println "suspend"))
+(defmethod ig/suspend-key! :graphql-server/visualizer-schema [_ _])
 
-(defmethod ig/resume-key :graphql-server/visualizer-schema [_ _ _ _]
-  (println "resume"))
+(defmethod ig/resume-key :graphql-server/visualizer-schema [_ opts old-opts _]
+  (binding [*print-meta* true]
+    (when-not (= (pr-str (:schema opts))
+                 (pr-str (:schema old-opts)))
+      (do (println "Schema changed.")
+          (.setLastModified (io/file "dev/src/graphql_server/visualizer.cljs")
+                            (System/currentTimeMillis))))))
 
 (defmethod ig/halt-key! :graphql-server/visualizer-schema [_ _]
-  (println "stop")
   (fig/stop "dev"))
