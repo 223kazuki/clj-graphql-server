@@ -3,52 +3,21 @@
             [io.pedestal.http.route :as route]
             [com.walmartlabs.lacinia.pedestal :as lacinia]
             [com.walmartlabs.lacinia.util :refer [attach-resolvers attach-streamers]]
-            [com.walmartlabs.lacinia.schema :as schema]))
+            [com.walmartlabs.lacinia.schema :as schema]
+            [hodur-engine.core :as engine]
+            [hodur-lacinia-schema.core :as hodur-lacinia]))
 
 (defn get-hero [context arguments value]
   (let [{:keys [episode]} arguments]
     (if (= episode :NEWHOPE)
       {:id 1000
        :name "Luke"
-       :home_planet "Tatooine"
-       :appears_in ["NEWHOPE" "EMPIRE" "JEDI"]}
+       :homePlanet "Tatooine"
+       :appearsIn ["NEWHOPE" "EMPIRE" "JEDI"]}
       {:id 2000
        :name "Lando Calrissian"
-       :home_planet "Socorro"
-       :appears_in ["EMPIRE" "JEDI"]})))
-
-(def schema
-  '{:enums
-    {:episode
-     {:description "The episodes of the original Star Wars trilogy."
-      :values [:NEWHOPE :EMPIRE :JEDI]}}
-
-    :objects
-    {:droid
-     {:fields {:primary_functions {:type (list String)}
-               :id {:type Int}
-               :name {:type String}
-               :appears_in {:type (list :episode)}}}
-
-     :human
-     {:fields {:id {:type Int}
-               :name {:type String}
-               :home_planet {:type String}
-               :appears_in {:type (list :episode)}}}}
-
-    :subscriptions
-    {:hero
-     {:type :human
-      :args {:name {:type String}}
-      :stream :stream-hero}}
-
-    :queries
-    {:hero {:type (non-null :human)
-            :args {:episode {:type :episode}}
-            :resolve :get-hero}
-     :droid {:type :droid
-             :args {:id {:type String :default-value "2001"}}
-             :resolve :get-droid}}})
+       :homePlanet "Socorro"
+       :appearsIn ["EMPIRE" "JEDI"]})))
 
 (defn hero-streamer
   [context args source-stream]
@@ -65,8 +34,9 @@
   #(println "stop!"))
 
 (defmethod ig/init-key ::schema [_ {:keys [:meta-db]}]
-  (println (hodur-lacinia/schema meta-db))
-  (-> schema
+  (clojure.pprint/pprint (hodur-lacinia/schema meta-db))
+  (-> meta-db
+      hodur-lacinia/schema
       (attach-resolvers {:get-hero get-hero
                          :get-droid (constantly {})})
       (attach-streamers {:stream-hero hero-streamer})

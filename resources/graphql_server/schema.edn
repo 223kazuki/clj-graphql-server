@@ -1,9 +1,37 @@
-[^{:lacinia/tag-recursive true}
- Person
- [^String first-name
-  ^String last-name
-  ^Gender gender]
+[^{:lacinia/tag true}
+ default
 
- ^:enum
- Gender
- [MALE FEMALE IRRELEVANT]]
+ droid
+ [^Integer id
+  ^String name
+  ^{:type String
+    :optional true
+    :cardinality [0 n]} primary-functions
+  ^{:type episode
+    :optional true
+    :cardinality [0 n]} appears-in]
+
+ human
+ [^Integer id
+  ^String name
+  ^String home-planet
+  ^{:type episode
+    :optional true
+    :cardinality [0 n]} appears-in]
+
+ ^{:enum true
+   :doc "The episodes of the original Star Wars trilogy."}
+ episode
+ [NEWHOPE EMPIRE JEDI]
+
+ ^:lacinia/query
+ QueryRoot
+ [^{:type human
+    :lacinia/resolve :get-hero} hero [^episode episode]
+  ^{:type droid
+    :lacinia/resolve :get-droid} droid [^{:type String
+                                          :default "2001"} id]]
+ ^:lacinia/subscription
+ SubscriptionRoot
+ [^{:type human
+    :lacinia/stream :stream-hero} hero [^String name]]]
