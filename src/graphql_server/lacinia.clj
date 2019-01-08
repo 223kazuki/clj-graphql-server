@@ -6,7 +6,8 @@
             [com.walmartlabs.lacinia.schema :as schema]
             [hodur-engine.core :as engine]
             [hodur-lacinia-schema.core :as hodur-lacinia]
-            [io.pedestal.http.cors :refer [allow-origin]]))
+            [io.pedestal.http.cors :refer [allow-origin]]
+            [com.walmartlabs.lacinia.pedestal.subscriptions :refer [default-subscription-interceptors]]))
 
 (defn get-hero [context arguments value]
   (let [{:keys [episode]} arguments]
@@ -46,6 +47,19 @@
   [_ {:keys [:schema :options :routes :interceptors]}]
   (let [cors-interceptor (allow-origin {:allowed-origins some?
                                         :creds true})
+        subscription-interceptors (-> (default-subscription-interceptors schema nil)
+                                      (conj {:name  ::check-context
+                                             :enter (fn [context]
+                                                      ;; TODO: check token.
+                                                      (println
+                                                       "token: "
+                                                       (get-in context
+                                                               [:request :token]))
+                                                      context)
+                                             :leave (fn [context]
+                                                      ;; TODO: close ws.
+                                                      context)})
+                                      vec)
         preflight-route ["/graphql" :options (fn [req] {:status 200})
                          :route-name ::preflight]
         routes (->> (lacinia/graphql-routes schema options)
@@ -58,4 +72,6 @@
                                (update-in [:interceptors] (partial cons cors-interceptor))
                                (update-in [:interceptors]
                                           #(into [] (concat interceptors %)))))))]
-    (lacinia/service-map schema (assoc options :routes routes))))
+    (lacinia/service-map schema (assoc options
+                                       :routes routes
+                                       :subscription-interceptors subscription-interceptors))))
