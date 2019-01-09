@@ -7,6 +7,7 @@
             [hodur-engine.core :as engine]
             [hodur-lacinia-schema.core :as hodur-lacinia]
             [io.pedestal.http.cors :refer [allow-origin]]
+            [io.pedestal.interceptor :as interceptor]
             [com.walmartlabs.lacinia.pedestal.subscriptions :refer [default-subscription-interceptors]]))
 
 (defn get-hero [context arguments value]
@@ -43,22 +44,25 @@
       (attach-streamers {:stream-hero hero-streamer})
       schema/compile))
 
+
+
 (defmethod ig/init-key ::service
   [_ {:keys [:schema :options :routes :interceptors]}]
   (let [cors-interceptor (allow-origin {:allowed-origins some?
                                         :creds true})
         subscription-interceptors (-> (default-subscription-interceptors schema nil)
-                                      (conj {:name  ::check-context
-                                             :enter (fn [context]
-                                                      ;; TODO: check token.
-                                                      (println
-                                                       "token: "
-                                                       (get-in context
-                                                               [:request :token]))
-                                                      context)
-                                             :leave (fn [context]
-                                                      ;; TODO: close ws.
-                                                      context)})
+                                      (conj (interceptor/map->Interceptor
+                                             {:name  :test.interceptor/check-context
+                                              :enter (fn [context]
+                                                       ;; TODO: check token.
+                                                       (println
+                                                        "token: "
+                                                        (get-in context
+                                                                [:request :token]))
+                                                       context)
+                                              :leave (fn [context]
+                                                       ;; TODO: close ws.
+                                                       context)}))
                                       vec)
         preflight-route ["/graphql" :options (fn [req] {:status 200})
                          :route-name ::preflight]
@@ -74,4 +78,5 @@
                                           #(into [] (concat interceptors %)))))))]
     (lacinia/service-map schema (assoc options
                                        :routes routes
-                                       :subscription-interceptors subscription-interceptors))))
+                                       :subscription-interceptors subscription-interceptors
+                                       ))))
