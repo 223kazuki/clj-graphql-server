@@ -4,10 +4,15 @@
             [io.pedestal.http.body-params :refer [body-params]]
             [io.pedestal.http.body-params :as body-params]
             [graphql-server.boundary.auth :as auth]
-            [clojure.data.json :as json]))
+            [clojure.data.json :as json]
+            [io.pedestal.http.cors :as cors]))
 
 (defmethod ig/init-key ::body-params [_ _]
   (body-params/body-params))
+
+(defmethod ig/init-key ::cors [_ _]
+  (cors/allow-origin {:allowed-origins some?
+                      :creds true}))
 
 (defmethod ig/init-key ::check-context [_ options]
   {:name  ::check-context
@@ -36,3 +41,16 @@
                     context
                     (assoc context :response forbidden-response))
                   (assoc context :response forbidden-response)))))})
+
+(defmethod ig/init-key ::ws-auth [_ {:keys [:auth]}]
+  {:name  :test.interceptor/check-context
+   :enter (fn [context]
+            ;; TODO: check token.
+            (println
+             "token: "
+             (get-in context
+                     [:request :token]))
+            context)
+   :leave (fn [context]
+            ;; TODO: close ws.
+            context)})
