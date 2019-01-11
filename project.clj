@@ -9,6 +9,7 @@
                  [duct/module.sql "0.5.0"]
                  [duct.module.pedestal "2.0.0"]
                  [org.postgresql/postgresql "42.2.5"]
+                 [com.datomic/datomic-free "0.9.5697" :exclusions [com.google.guava/guava]]
 
                  [hiccup "1.0.5"]
                  [org.clojure/core.cache "0.7.2"]
@@ -20,6 +21,7 @@
 
                  [hodur/engine "0.1.5"]
                  [hodur/lacinia-schema "0.1.1"]
+                 [hodur/datomic-schema "0.1.0"]
                  [hodur/spec-schema "0.1.0"]]
   :plugins [[duct/lein-duct "0.11.0-beta4"]]
   :main ^:skip-aot graphql-server.main
