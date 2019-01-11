@@ -1,4 +1,5 @@
-[^{:lacinia/tag true}
+[^{:lacinia/tag true
+   :datomic/tag true}
  default
 
  rikishi

@@ -10,6 +10,10 @@
 
   :duct.server/pedestal {:service #ig/ref :graphql-server.lacinia/service}
 
+  :graphql-server.datomic/schema {:meta-db #ig/ref :graphql-server/hodur}
+  :graphql-server/datomic {:url "datomic:free://127.0.0.1:4334/graphql_server"
+                           :schema #ig/ref :graphql-server.datomic/schema}
+
   :graphql-server.lacinia/schema {:meta-db #ig/ref :graphql-server/hodur}
   :graphql-server.lacinia/service
   {:graphiql true

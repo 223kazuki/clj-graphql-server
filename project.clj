@@ -10,6 +10,7 @@
                  [duct.module.pedestal "2.0.0"]
                  [org.postgresql/postgresql "42.2.5"]
                  [com.datomic/datomic-free "0.9.5697" :exclusions [com.google.guava/guava]]
+                 ;;[com.datomic/client-api "0.8.13"]
 
                  [hiccup "1.0.5"]
                  [org.clojure/core.cache "0.7.2"]
