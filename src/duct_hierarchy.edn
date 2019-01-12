@@ -1,1 +1,2 @@
-{}
+{:duct.module/datomic [:duct/module]
+ :duct.migrator/datomic [:duct/migrator]}

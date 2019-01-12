@@ -6,29 +6,32 @@
    :token-cache-expire #duct/env ["TOKEN_CACHE_EXPIRE" Int :or 600000]
    :refresh-token-cache-expire #duct/env ["REFRESH_TOKEN_CACHE_EXPIRE" Int :or 600000]}
 
-  :graphql-server/hodur {:schema #duct/include "graphql_server/schema"}
-
   :duct.server/pedestal {:service #ig/ref :graphql-server.lacinia/service}
+  :duct.migrator/datomic {:transactions #ig/ref :graphql-server.datomic/schema}
 
+  :graphql-server/hodur {:schema #duct/include "graphql_server/schema"}
   :graphql-server.datomic/schema {:meta-db #ig/ref :graphql-server/hodur}
-  :graphql-server/datomic {:url "datomic:free://127.0.0.1:4334/graphql_server"
-                           :schema #ig/ref :graphql-server.datomic/schema}
-
   :graphql-server.lacinia/schema {:meta-db #ig/ref :graphql-server/hodur}
   :graphql-server.lacinia/service
   {:graphiql true
-   :subscriptions true
    :port #duct/env ["PORT" Int :or 8080]
-   :interceptors [#ig/ref :graphql-server.interceptor/auth]
-   :subscription-interceptors [#ig/ref :graphql-server.interceptor/ws-auth]
-   :routes
+
+   :subscriptions true
+   :optional-interceptors [#ig/ref :graphql-server.interceptor/auth]
+   :optional-subscription-interceptors [#ig/ref :graphql-server.interceptor/ws-auth]
+   :optional-routes
    [["/login"      :get  [#ig/ref :graphql-server.handler.auth/login-page] :route-name :login-page]
     ["/login"      :post [#ig/ref :graphql-server.interceptor/body-params
                           #ig/ref :graphql-server.handler.auth/login] :route-name :login]
     ["/token"      :post [#ig/ref :graphql-server.handler.auth/token] :route-name :token]
     ["/introspect" :get  [#ig/ref :graphql-server.handler.auth/introspect] :route-name :introspect]
-    ["/graphql" :options [#ig/ref :graphql-server.handler.cors/preflight] :route-name :preflight]]
-   :schema #ig/ref :graphql-server.lacinia/schema}
+    ["/graphql"    :options [#ig/ref :graphql-server.handler.cors/preflight] :route-name :preflight]]
+
+   :schema #ig/ref :graphql-server.lacinia/schema
+   :resolvers {:get-hero #ig/ref :graphql-server.handler.resolver/get-hero
+               :get-droid #ig/ref :graphql-server.handler.resolver/get-droid
+               :create-rikishi #ig/ref :graphql-server.handler.resolver/create-rikishi}
+   :streamers {:stream-hero #ig/ref :graphql-server.handler.streamer/stream-hero}}
 
   :graphql-server.interceptor/body-params {}
   :graphql-server.interceptor/auth {:auth #ig/ref :graphql-server/auth}
@@ -45,13 +48,17 @@
                                            :db #ig/ref :duct.database/sql}
   :graphql-server.handler.cors/preflight {}
 
+  :graphql-server.handler.resolver/get-hero {:datomic #ig/ref :duct.database/datomic}
+  :graphql-server.handler.resolver/get-droid {:datomic #ig/ref :duct.database/datomic}
+  :graphql-server.handler.resolver/create-rikishi {:datomic #ig/ref :duct.database/datomic}
+  :graphql-server.handler.streamer/stream-hero {:datomic #ig/ref :duct.database/datomic}
+
   [:duct.migrator.ragtime/sql :graphql-server.migration/ddl-20190101-00-add-user]
   {:up ["CREATE TABLE \"user\" (
           id SERIAL PRIMARY KEY,
           email_address varchar unique not null,
           password varchar not null)"]
    :down ["DROP TABLE \"user\""]}
-
   [:duct.migrator.ragtime/sql :graphql-server.migration/ddl-20190101-01-add-client]
   {:up ["CREATE TABLE client (
           client_id varchar,
@@ -71,4 +78,5 @@
 
  :duct.module/logging {}
  :duct.module/sql {}
+ :duct.module/datomic {}
  :duct.module/pedestal {}}

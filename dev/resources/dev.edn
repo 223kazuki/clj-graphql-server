@@ -1,6 +1,9 @@
 {:duct.database/sql
  {:connection-uri "jdbc:postgresql://localhost:5432/graphql_server?user=postgres&password=tisus"}
 
+ :duct.database/datomic
+ {:connection-uri "datomic:free://127.0.0.1:4334/graphql_server"}
+
  :graphql-server/visualizer-schema {:schema #duct/include "graphql_server/schema"}
 
  :duct.migrator/ragtime

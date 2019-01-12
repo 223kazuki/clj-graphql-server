@@ -3,14 +3,12 @@
  default
 
  rikishi
- [^Integer id
-  ^String shikona
+ [^String shikona
   ^sumobeya sumobeya
   ^banduke banduke]
 
  sumobeya
- [^Integer id
-  ^String name
+ [^String name
   ^{:type rikishi
     :cardinality [0 n]} shozoku-rikishi]
 
@@ -24,8 +22,7 @@
  [YOKODUNA OZEKI SEKIWAKE KOMUSUBI MAEGASHIRA JURYO MAKUSHITA SANDANME JONIDAN JONOKUCHI MAEZUMO]
 
  basho
- [^Integer id
-  ^Integer year
+ [^Integer year
   ^bashomei bashomei]
 
  ^{:enum true}
@@ -33,8 +30,7 @@
  [HATSUBASHO HARUBASHO NATSUBASHO NAGOYABASHO AKIBASHO KYUSHUBASHO]
 
  torikumi
- [^Integer id
-  ^basho basho
+ [^basho basho
   ^Integer hiduke
   ^rikishi higashi
   ^rikishi nishi
@@ -83,6 +79,10 @@
   ^{:type droid
     :lacinia/resolve :get-droid} droid [^{:type String
                                           :default "2001"} id]]
+ ^:lacinia/mutation
+ MutationRoot
+ [^{:type rikishi
+    :lacinia/resolve :create-rikishi} create-rikishi [^String shikona]]
  ^:lacinia/subscription
  SubscriptionRoot
  [^{:type human
