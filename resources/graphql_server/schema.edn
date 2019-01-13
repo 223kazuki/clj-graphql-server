@@ -3,19 +3,21 @@
  default
 
  rikishi
- [^String shikona
-  ^sumobeya sumobeya
-  ^banduke banduke]
+ [^{:type Integer
+    :datomic/unique :db.unique/identity} id
+  ^String shikona
+  ^{:type sumobeya
+    :lacinia/resolve :rikishi-sumobeya} sumobeya
+  ^String banduke
+  ^String shusshinchi]
 
  sumobeya
- [^String name
+ [^{:type Integer
+    :datomic/unique :db.unique/identity} id
+  ^String name
   ^{:type rikishi
-    :cardinality [0 n]} shozoku-rikishi]
-
- banduke
- [^class class
-  ^{:type Integer
-    :optional true} maisu]
+    :cardinality [0 n]
+    :datomic/tag false} shozoku-rikishi]
 
  ^{:enum true}
  class
@@ -30,7 +32,8 @@
  [HATSUBASHO HARUBASHO NATSUBASHO NAGOYABASHO AKIBASHO KYUSHUBASHO]
 
  torikumi
- [^basho basho
+ [^Integer id
+  ^basho basho
   ^Integer hiduke
   ^rikishi higashi
   ^rikishi nishi
@@ -49,41 +52,19 @@
   OKURIGAKE OKURIHIKIOTOSHI WARIDASHI UTCHARI KIMEDASHI KIMETAOSHI USHIROMOTARE YOBIMODOSHI ISAMIASHI KOSHIKUDAKE
   TSUKITE TSUKIHIZA FUMIDASHI]
 
- droid
- [^Integer id
-  ^String name
-  ^{:type String
-    :optional true
-    :cardinality [0 n]} primary-functions
-  ^{:type episode
-    :optional true
-    :cardinality [0 n]} appears-in]
-
- human
- [^Integer id
-  ^String name
-  ^String home-planet
-  ^{:type episode
-    :optional true
-    :cardinality [0 n]} appears-in]
-
- ^{:enum true
-   :doc "The episodes of the original Star Wars trilogy."}
- episode
- [NEWHOPE EMPIRE JEDI]
-
  ^:lacinia/query
  QueryRoot
- [^{:type human
-    :lacinia/resolve :get-hero} hero [^episode episode]
-  ^{:type droid
-    :lacinia/resolve :get-droid} droid [^{:type String
-                                          :default "2001"} id]]
+ [^{:type sumobeya
+    :lacinia/resolve :get-sumobeya} sumobeya [^{:type Integer
+                                                :default 2001} id]
+  ^{:type rikishi
+    :lacinia/resolve :get-rikishi} rikishi [^{:type Integer
+                                              :default 2001} id]]
  ^:lacinia/mutation
  MutationRoot
  [^{:type rikishi
     :lacinia/resolve :create-rikishi} create-rikishi [^String shikona]]
  ^:lacinia/subscription
  SubscriptionRoot
- [^{:type human
-    :lacinia/stream :stream-hero} hero [^String name]]]
+ [^{:type torikumi
+    :lacinia/stream :stream-torikumi} torikumi []]]

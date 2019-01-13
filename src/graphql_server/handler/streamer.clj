@@ -1,7 +1,7 @@
 (ns graphql-server.handler.streamer
   (:require [integrant.core :as ig]))
 
-(defmethod ig/init-key ::stream-hero [_ {:keys [datomic]}]
+(defmethod ig/init-key ::stream-torikumi [_ {:keys [datomic]}]
   (fn [context args source-stream]
     (println context)
     (println "start!")

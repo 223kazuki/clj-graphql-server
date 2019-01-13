@@ -2,22 +2,31 @@
   (:require [integrant.core :as ig]
             [datomic.api :as d]))
 
-(defmethod ig/init-key ::get-hero [_ {:keys [datomic]}]
+(defmethod ig/init-key ::get-rikishi [_ {:keys [datomic]}]
   (fn [context arguments value]
-    (let [{:keys [episode]} arguments]
-      (if (= episode :NEWHOPE)
-        {:id 1000
-         :name "Luke"
-         :homePlanet "Tatooine"
-         :appearsIn ["NEWHOPE" "EMPIRE" "JEDI"]}
-        {:id 2000
-         :name "Lando Calrissian"
-         :homePlanet "Socorro"
-         :appearsIn ["EMPIRE" "JEDI"]}))))
+    (let [{:keys [id]} arguments
+          db (d/db (:connection datomic))
+          {:keys [rikishi/id rikishi/shikona rikishi/shusshinchi rikishi/sumobeya rikishi/banduke]}
+          (d/pull db '[*] [:rikishi/id id])]
+      {:id id :shikona shikona :shusshinchi shusshinchi :banduke banduke})))
 
-(defmethod ig/init-key ::get-droid [_ {:keys [datomic]}]
+(defmethod ig/init-key ::rikishi-sumobeya [_ {:keys [datomic]}]
+  (fn [context arguments rikishi]
+    (let [{:keys [id]} rikishi
+          db (d/db (:connection datomic))
+          {:keys [rikishi/sumobeya]}
+          (d/pull db '[{:rikishi/sumobeya [*]}] [:rikishi/id id])]
+      (println sumobeya)
+      (let [{:keys [sumobeya/id sumobeya/name]} sumobeya]
+        {:id id :name name}))))
+
+(defmethod ig/init-key ::get-sumobeya [_ {:keys [datomic]}]
   (fn [context arguments value]
-    {}))
+    (let [{:keys [id]} arguments
+          db (d/db (:connection datomic))
+          {:keys [sumobeya/id sumobeya/name]}
+          (d/pull db '[*] [:sumobeya/id id])]
+      {:id id :name name})))
 
 (defmethod ig/init-key ::create-rikishi [_ {:keys [datomic]}]
   (fn [context arguments _]
