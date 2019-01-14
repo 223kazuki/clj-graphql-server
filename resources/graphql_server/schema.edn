@@ -9,7 +9,7 @@
   ^{:type sumobeya
     :lacinia/resolve :rikishi-sumobeya} sumobeya
   ^String banduke
-  ^String shusshinchi]
+  ^String syusshinchi]
 
  sumobeya
  [^{:type Integer
@@ -17,7 +17,8 @@
   ^String name
   ^{:type rikishi
     :cardinality [0 n]
-    :datomic/tag false} shozoku-rikishi]
+    :datomic/tag false
+    :lacinia/resolve :sumobeya-rikishis} rikishis]
 
  ^{:enum true}
  class
@@ -56,14 +57,20 @@
  QueryRoot
  [^{:type sumobeya
     :lacinia/resolve :get-sumobeya} sumobeya [^{:type Integer
-                                                :default 2001} id]
+                                                :default 1} id]
   ^{:type rikishi
     :lacinia/resolve :get-rikishi} rikishi [^{:type Integer
-                                              :default 2001} id]]
+                                              :default 1} id]
+  ^{:type rikishi
+    :lacinia/resolve :get-rikishi-by-shikona} rikishi-by-shikona [^{:type String
+                                                                    :default "白鵬"} shikona]]
  ^:lacinia/mutation
  MutationRoot
  [^{:type rikishi
-    :lacinia/resolve :create-rikishi} create-rikishi [^String shikona]]
+    :lacinia/resolve :create-rikishi} create-rikishi [^String shikona
+                                                      ^String banduke
+                                                      ^String syusshinchi
+                                                      ^Integer sumobeya-id]]
  ^:lacinia/subscription
  SubscriptionRoot
  [^{:type torikumi

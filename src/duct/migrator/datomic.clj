@@ -17,12 +17,27 @@
 (comment
   (d/delete-database "datomic:free://127.0.0.1:4334/graphql_server")
   (d/create-database "datomic:free://127.0.0.1:4334/graphql_server")
-  (def con (d/connect "datomic:free://127.0.0.1:4334/graphql_server"))
-  (def db (d/db con))
+  (do
+    (def con (d/connect "datomic:free://127.0.0.1:4334/graphql_server"))
+    (def db (d/db con)))
 
   (d/q '[:find ?e
          :where
-         [?e :rikishi/id 1]]
+         [?e :sumobeya/id 1]
+         [?e2 :rikishi/sumobeya ?sumobeya]]
+       db)
+
+  (d/pull-many
+   db '[*]
+   (map first (d/q '[:find ?e
+                     :in $ ?sumobeya
+                     :where
+                     [?e :rikishi/sumobeya ?sumobeya]]
+                   db [:sumobeya/id 2])))
+
+  (d/q '[:find (max ?id)
+         :where
+         [?e :rikishi/id ?id]]
        db)
 
   (d/pull db '[*] [:rikishi/id 1]))

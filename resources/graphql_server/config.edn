@@ -30,7 +30,9 @@
    :schema #ig/ref :graphql-server.lacinia/schema
    :resolvers {:get-rikishi #ig/ref :graphql-server.handler.resolver/get-rikishi
                :rikishi-sumobeya #ig/ref :graphql-server.handler.resolver/rikishi-sumobeya
+               :sumobeya-rikishis #ig/ref :graphql-server.handler.resolver/sumobeya-rikishis
                :get-sumobeya #ig/ref :graphql-server.handler.resolver/get-sumobeya
+               :get-rikishi-by-shikona  #ig/ref :graphql-server.handler.resolver/get-rikishi-by-shikona
                :create-rikishi #ig/ref :graphql-server.handler.resolver/create-rikishi}
    :streamers {:stream-torikumi #ig/ref :graphql-server.handler.streamer/stream-torikumi}}
 
@@ -48,7 +50,9 @@
 
   :graphql-server.handler.resolver/get-rikishi {:datomic #ig/ref :duct.database/datomic}
   :graphql-server.handler.resolver/rikishi-sumobeya {:datomic #ig/ref :duct.database/datomic}
+  :graphql-server.handler.resolver/sumobeya-rikishis {:datomic #ig/ref :duct.database/datomic}
   :graphql-server.handler.resolver/get-sumobeya {:datomic #ig/ref :duct.database/datomic}
+  :graphql-server.handler.resolver/get-rikishi-by-shikona {:datomic #ig/ref :duct.database/datomic}
   :graphql-server.handler.resolver/create-rikishi {:datomic #ig/ref :duct.database/datomic}
   :graphql-server.handler.streamer/stream-torikumi {:datomic #ig/ref :duct.database/datomic}
 

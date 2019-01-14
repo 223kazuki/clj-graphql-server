@@ -68,73 +68,73 @@
        {:sumobeya/id 46 :sumobeya/name "朝日山"}]}
 
  [:duct.migrator.datomic/transactions :graphql-server.migration/test-rikishi]
- {:up [{:rikishi/id 1 :rikishi/shikona "稀勢の里 " :rikishi/banduke "東横綱" :rikishi/shusshinchi "茨城県" :rikishi/sumobeya [:sumobeya/id 19]}
-       {:rikishi/id 2 :rikishi/shikona "白鵬 " :rikishi/banduke "西横綱" :rikishi/shusshinchi "モンゴル" :rikishi/sumobeya [:sumobeya/id 44]}
-       {:rikishi/id 3 :rikishi/shikona "鶴竜 " :rikishi/banduke "東横綱" :rikishi/shusshinchi "モンゴル" :rikishi/sumobeya [:sumobeya/id 33]}
-       {:rikishi/id 4 :rikishi/shikona "高安 " :rikishi/banduke "東大関" :rikishi/shusshinchi "茨城県" :rikishi/sumobeya [:sumobeya/id 19]}
-       {:rikishi/id 5 :rikishi/shikona "豪栄道" :rikishi/banduke "西大関" :rikishi/shusshinchi "大阪府" :rikishi/sumobeya [:sumobeya/id 12]}
-       {:rikishi/id 6 :rikishi/shikona "栃ノ心" :rikishi/banduke "西大関" :rikishi/shusshinchi "ジョージア" :rikishi/sumobeya [:sumobeya/id 2]}
-       {:rikishi/id 7 :rikishi/shikona "貴景勝" :rikishi/banduke "東関脇" :rikishi/shusshinchi "兵庫県" :rikishi/sumobeya [:sumobeya/id 26]}
-       {:rikishi/id 8 :rikishi/shikona "玉鷲 " :rikishi/banduke "西関脇" :rikishi/shusshinchi "モンゴル" :rikishi/sumobeya [:sumobeya/id 18]}
-       {:rikishi/id 9 :rikishi/shikona "妙義龍" :rikishi/banduke "東小結" :rikishi/shusshinchi "兵庫県" :rikishi/sumobeya [:sumobeya/id 12]}
-       {:rikishi/id 10 :rikishi/shikona "御嶽海" :rikishi/banduke "西小結" :rikishi/shusshinchi "長野県" :rikishi/sumobeya [:sumobeya/id 1]}
-       {:rikishi/id 11 :rikishi/shikona "栃煌山" :rikishi/banduke "東前頭筆頭" :rikishi/shusshinchi "高知県" :rikishi/sumobeya [:sumobeya/id 2]}
-       {:rikishi/id 12 :rikishi/shikona "逸ノ城" :rikishi/banduke "西前頭筆頭" :rikishi/shusshinchi "モンゴル" :rikishi/sumobeya [:sumobeya/id 27]}
-       {:rikishi/id 13 :rikishi/shikona "錦木 " :rikishi/banduke "東前頭二枚目" :rikishi/shusshinchi "岩手県" :rikishi/sumobeya [:sumobeya/id 31]}
-       {:rikishi/id 14 :rikishi/shikona "北勝富士 " :rikishi/banduke "西前頭二枚目" :rikishi/shusshinchi "埼玉県" :rikishi/sumobeya [:sumobeya/id 41]}
-       {:rikishi/id 15 :rikishi/shikona "正代 " :rikishi/banduke "東前頭三枚目" :rikishi/shusshinchi "熊本県" :rikishi/sumobeya [:sumobeya/id 29]}
-       {:rikishi/id 16 :rikishi/shikona "松鳳山" :rikishi/banduke "西前頭三枚目" :rikishi/shusshinchi "福岡県" :rikishi/sumobeya [:sumobeya/id 14]}
-       {:rikishi/id 17 :rikishi/shikona "琴奨菊" :rikishi/banduke "東前頭四枚目" :rikishi/shusshinchi "福岡県" :rikishi/sumobeya [:sumobeya/id 15]}
-       {:rikishi/id 18 :rikishi/shikona "隠岐の海 " :rikishi/banduke "西前頭四枚目" :rikishi/shusshinchi "島根県" :rikishi/sumobeya [:sumobeya/id 41]}
-       {:rikishi/id 19 :rikishi/shikona "碧山 " :rikishi/banduke "東前頭五枚目" :rikishi/shusshinchi "ブルガリア" :rikishi/sumobeya [:sumobeya/id 2]}
-       {:rikishi/id 20 :rikishi/shikona "嘉風 " :rikishi/banduke "西前頭五枚目" :rikishi/shusshinchi "大分県" :rikishi/sumobeya [:sumobeya/id 16]}
-       {:rikishi/id 21 :rikishi/shikona "千代大龍 " :rikishi/banduke "東前頭六枚目" :rikishi/shusshinchi "東京都" :rikishi/sumobeya [:sumobeya/id 40]}
-       {:rikishi/id 22 :rikishi/shikona "阿武咲" :rikishi/banduke "西前頭六枚目" :rikishi/shusshinchi "青森県" :rikishi/sumobeya [:sumobeya/id 25]}
-       {:rikishi/id 23 :rikishi/shikona "竜電 " :rikishi/banduke "東前頭七枚目" :rikishi/shusshinchi "山梨県" :rikishi/sumobeya [:sumobeya/id 21]}
-       {:rikishi/id 24 :rikishi/shikona "大栄翔" :rikishi/banduke "西前頭七枚目" :rikishi/shusshinchi "埼玉県" :rikishi/sumobeya [:sumobeya/id 35]}
-       {:rikishi/id 25 :rikishi/shikona "魁聖 " :rikishi/banduke "東前頭八枚目" :rikishi/shusshinchi "ブラジル" :rikishi/sumobeya [:sumobeya/id 43]}
-       {:rikishi/id 26 :rikishi/shikona "朝乃山" :rikishi/banduke "西前頭八枚目" :rikishi/shusshinchi "富山県" :rikishi/sumobeya [:sumobeya/id 37]}
-       {:rikishi/id 27 :rikishi/shikona "貴ノ岩" :rikishi/banduke "東前頭九枚目" :rikishi/shusshinchi "モンゴル" :rikishi/sumobeya [:sumobeya/id 26]}
-       {:rikishi/id 28 :rikishi/shikona "遠藤 " :rikishi/banduke "西前頭九枚目" :rikishi/shusshinchi "石川県" :rikishi/sumobeya [:sumobeya/id 35]}
-       {:rikishi/id 29 :rikishi/shikona "宝富士" :rikishi/banduke "東前頭十枚目" :rikishi/shusshinchi "青森県" :rikishi/sumobeya [:sumobeya/id 42]}
-       {:rikishi/id 30 :rikishi/shikona "阿炎 " :rikishi/banduke "西前頭十枚目" :rikishi/shusshinchi "埼玉県" :rikishi/sumobeya [:sumobeya/id 28]}
-       {:rikishi/id 31 :rikishi/shikona "佐田の海 " :rikishi/banduke "東前頭十一枚目" :rikishi/shusshinchi "熊本県" :rikishi/sumobeya [:sumobeya/id 12]}
-       {:rikishi/id 32 :rikishi/shikona "勢" :rikishi/banduke "西前頭十一枚目" :rikishi/shusshinchi "大阪府" :rikishi/sumobeya [:sumobeya/id 31]}
-       {:rikishi/id 33 :rikishi/shikona "輝" :rikishi/banduke "東前頭十二枚目" :rikishi/shusshinchi "石川県" :rikishi/sumobeya [:sumobeya/id 21]}
-       {:rikishi/id 34 :rikishi/shikona "明生 " :rikishi/banduke "西前頭十二枚目" :rikishi/shusshinchi "鹿児島県" :rikishi/sumobeya [:sumobeya/id 13]}
-       {:rikishi/id 35 :rikishi/shikona "矢後 " :rikishi/banduke "東前頭十三枚目" :rikishi/shusshinchi "北海道" :rikishi/sumobeya [:sumobeya/id 16]}
-       {:rikishi/id 36 :rikishi/shikona "琴勇輝" :rikishi/banduke "西前頭十三枚目" :rikishi/shusshinchi "香川県" :rikishi/sumobeya [:sumobeya/id 15]}
-       {:rikishi/id 37 :rikishi/shikona "豊山 " :rikishi/banduke "東前頭十四枚目" :rikishi/shusshinchi "新潟県" :rikishi/sumobeya [:sumobeya/id 29]}
-       {:rikishi/id 38 :rikishi/shikona "千代翔馬 " :rikishi/banduke "西前頭十四枚目" :rikishi/shusshinchi "モンゴル" :rikishi/sumobeya [:sumobeya/id 40]}
-       {:rikishi/id 39 :rikishi/shikona "千代の国 " :rikishi/banduke "東前頭十五枚目" :rikishi/shusshinchi "三重県" :rikishi/sumobeya [:sumobeya/id 40]}
-       {:rikishi/id 40 :rikishi/shikona "琴恵光" :rikishi/banduke "西前頭十五枚目" :rikishi/shusshinchi "宮崎県" :rikishi/sumobeya [:sumobeya/id 15]}
-       {:rikishi/id 41 :rikishi/shikona "大奄美" :rikishi/banduke "東前頭十六枚目" :rikishi/shusshinchi "鹿児島県" :rikishi/sumobeya [:sumobeya/id 35]}
-       {:rikishi/id 42 :rikishi/shikona "大翔丸" :rikishi/banduke "西前頭十六枚目" :rikishi/shusshinchi "大阪府" :rikishi/sumobeya [:sumobeya/id 35]}
-       {:rikishi/id 43 :rikishi/shikona "照強 " :rikishi/banduke "東十両筆頭" :rikishi/shusshinchi "兵庫県" :rikishi/sumobeya [:sumobeya/id 42]}
-       {:rikishi/id 44 :rikishi/shikona "大翔鵬" :rikishi/banduke "西十両筆頭" :rikishi/shusshinchi "モンゴル" :rikishi/sumobeya [:sumobeya/id 35]}
-       {:rikishi/id 45 :rikishi/shikona "貴源治" :rikishi/banduke "東十両二枚目" :rikishi/shusshinchi "栃木県" :rikishi/sumobeya [:sumobeya/id 26]}
-       {:rikishi/id 46 :rikishi/shikona "隆の勝" :rikishi/banduke "西十両二枚目" :rikishi/shusshinchi "千葉県" :rikishi/sumobeya [:sumobeya/id 26]}
-       {:rikishi/id 47 :rikishi/shikona "安美錦" :rikishi/banduke "東十両三枚目" :rikishi/shusshinchi "青森県" :rikishi/sumobeya [:sumobeya/id 42]}
-       {:rikishi/id 48 :rikishi/shikona "石浦 " :rikishi/banduke "西十両三枚目" :rikishi/shusshinchi "鳥取県" :rikishi/sumobeya [:sumobeya/id 44]}
-       {:rikishi/id 49 :rikishi/shikona "友風 " :rikishi/banduke "東十両四枚目" :rikishi/shusshinchi "神奈川県" :rikishi/sumobeya [:sumobeya/id 16]}
-       {:rikishi/id 50 :rikishi/shikona "徳勝龍" :rikishi/banduke "西十両四枚目" :rikishi/shusshinchi "奈良県" :rikishi/sumobeya [:sumobeya/id 7]}
-       {:rikishi/id 51 :rikishi/shikona "若隆景" :rikishi/banduke "東十両五枚目" :rikishi/shusshinchi "福島県" :rikishi/sumobeya [:sumobeya/id 30]}
-       {:rikishi/id 52 :rikishi/shikona "豊ノ島" :rikishi/banduke "西十両五枚目" :rikishi/shusshinchi "高知県" :rikishi/sumobeya [:sumobeya/id 29]}
-       {:rikishi/id 53 :rikishi/shikona "白鷹山" :rikishi/banduke "東十両六枚目" :rikishi/shusshinchi "山形県" :rikishi/sumobeya [:sumobeya/id 21]}
-       {:rikishi/id 54 :rikishi/shikona "千代丸" :rikishi/banduke "西十両六枚目" :rikishi/shusshinchi "鹿児島県" :rikishi/sumobeya [:sumobeya/id 40]}
-       {:rikishi/id 55 :rikishi/shikona "東龍 " :rikishi/banduke "東十両七枚目" :rikishi/shusshinchi "モンゴル" :rikishi/sumobeya [:sumobeya/id 3]}
-       {:rikishi/id 56 :rikishi/shikona "明瀬山" :rikishi/banduke "西十両七枚目" :rikishi/shusshinchi "愛知県" :rikishi/sumobeya [:sumobeya/id 7]}
-       {:rikishi/id 57 :rikishi/shikona "炎鵬 " :rikishi/banduke "東十両八枚目" :rikishi/shusshinchi "石川県" :rikishi/sumobeya [:sumobeya/id 44]}
-       {:rikishi/id 58 :rikishi/shikona "英乃海" :rikishi/banduke "西十両八枚目" :rikishi/shusshinchi "東京都" :rikishi/sumobeya [:sumobeya/id 7]}
-       {:rikishi/id 59 :rikishi/shikona "旭大星" :rikishi/banduke "東十両九枚目" :rikishi/shusshinchi "北海道" :rikishi/sumobeya [:sumobeya/id 43]}
-       {:rikishi/id 60 :rikishi/shikona "水戸龍" :rikishi/banduke "西十両九枚目" :rikishi/shusshinchi "モンゴル" :rikishi/sumobeya [:sumobeya/id 39]}
-       {:rikishi/id 61 :rikishi/shikona "荒鷲 " :rikishi/banduke "東十両十枚目" :rikishi/shusshinchi "モンゴル" :rikishi/sumobeya [:sumobeya/id 22]}
-       {:rikishi/id 62 :rikishi/shikona "翔猿 " :rikishi/banduke "西十両十枚目" :rikishi/shusshinchi "東京都" :rikishi/sumobeya [:sumobeya/id 35]}
-       {:rikishi/id 63 :rikishi/shikona "志摩ノ海 " :rikishi/banduke "東十両十一枚目" :rikishi/shusshinchi "三重県" :rikishi/sumobeya [:sumobeya/id 7]}
-       {:rikishi/id 64 :rikishi/shikona "剣翔 " :rikishi/banduke "西十両十一枚目" :rikishi/shusshinchi "東京都" :rikishi/sumobeya [:sumobeya/id 35]}
-       {:rikishi/id 65 :rikishi/shikona "豪風 " :rikishi/banduke "東十両十二枚目" :rikishi/shusshinchi "秋田県" :rikishi/sumobeya [:sumobeya/id 16]}
-       {:rikishi/id 66 :rikishi/shikona "蒼国来" :rikishi/banduke "西十両十二枚目" :rikishi/shusshinchi "中国" :rikishi/sumobeya [:sumobeya/id 30]}
-       {:rikishi/id 67 :rikishi/shikona "旭秀鵬" :rikishi/banduke "東十両十三枚目" :rikishi/shusshinchi "モンゴル" :rikishi/sumobeya [:sumobeya/id 43]}
-       {:rikishi/id 68 :rikishi/shikona "常幸龍" :rikishi/banduke "西十両十三枚目" :rikishi/shusshinchi "東京都" :rikishi/sumobeya [:sumobeya/id 7]}
-       {:rikishi/id 69 :rikishi/shikona "臥牙丸" :rikishi/banduke "東十両十四枚目" :rikishi/shusshinchi "ジョージア" :rikishi/sumobeya [:sumobeya/id 7]}
-       {:rikishi/id 70 :rikishi/shikona "千代の海 " :rikishi/banduke "西十両十四枚目" :rikishi/shusshinchi "高知県" :rikishi/sumobeya [:sumobeya/id 40]}]}}
+ {:up [{:rikishi/id 1 :rikishi/shikona "稀勢の里" :rikishi/banduke "東横綱" :rikishi/syusshinchi "茨城県" :rikishi/sumobeya [:sumobeya/id 19]}
+       {:rikishi/id 2 :rikishi/shikona "白鵬" :rikishi/banduke "西横綱" :rikishi/syusshinchi "モンゴル" :rikishi/sumobeya [:sumobeya/id 44]}
+       {:rikishi/id 3 :rikishi/shikona "鶴竜" :rikishi/banduke "東横綱" :rikishi/syusshinchi "モンゴル" :rikishi/sumobeya [:sumobeya/id 33]}
+       {:rikishi/id 4 :rikishi/shikona "高安" :rikishi/banduke "東大関" :rikishi/syusshinchi "茨城県" :rikishi/sumobeya [:sumobeya/id 19]}
+       {:rikishi/id 5 :rikishi/shikona "豪栄道" :rikishi/banduke "西大関" :rikishi/syusshinchi "大阪府" :rikishi/sumobeya [:sumobeya/id 12]}
+       {:rikishi/id 6 :rikishi/shikona "栃ノ心" :rikishi/banduke "西大関" :rikishi/syusshinchi "ジョージア" :rikishi/sumobeya [:sumobeya/id 2]}
+       {:rikishi/id 7 :rikishi/shikona "貴景勝" :rikishi/banduke "東関脇" :rikishi/syusshinchi "兵庫県" :rikishi/sumobeya [:sumobeya/id 26]}
+       {:rikishi/id 8 :rikishi/shikona "玉鷲" :rikishi/banduke "西関脇" :rikishi/syusshinchi "モンゴル" :rikishi/sumobeya [:sumobeya/id 18]}
+       {:rikishi/id 9 :rikishi/shikona "妙義龍" :rikishi/banduke "東小結" :rikishi/syusshinchi "兵庫県" :rikishi/sumobeya [:sumobeya/id 12]}
+       {:rikishi/id 10 :rikishi/shikona "御嶽海" :rikishi/banduke "西小結" :rikishi/syusshinchi "長野県" :rikishi/sumobeya [:sumobeya/id 1]}
+       {:rikishi/id 11 :rikishi/shikona "栃煌山" :rikishi/banduke "東前頭筆頭" :rikishi/syusshinchi "高知県" :rikishi/sumobeya [:sumobeya/id 2]}
+       {:rikishi/id 12 :rikishi/shikona "逸ノ城" :rikishi/banduke "西前頭筆頭" :rikishi/syusshinchi "モンゴル" :rikishi/sumobeya [:sumobeya/id 27]}
+       {:rikishi/id 13 :rikishi/shikona "錦木" :rikishi/banduke "東前頭二枚目" :rikishi/syusshinchi "岩手県" :rikishi/sumobeya [:sumobeya/id 31]}
+       {:rikishi/id 14 :rikishi/shikona "北勝富士" :rikishi/banduke "西前頭二枚目" :rikishi/syusshinchi "埼玉県" :rikishi/sumobeya [:sumobeya/id 41]}
+       {:rikishi/id 15 :rikishi/shikona "正代" :rikishi/banduke "東前頭三枚目" :rikishi/syusshinchi "熊本県" :rikishi/sumobeya [:sumobeya/id 29]}
+       {:rikishi/id 16 :rikishi/shikona "松鳳山" :rikishi/banduke "西前頭三枚目" :rikishi/syusshinchi "福岡県" :rikishi/sumobeya [:sumobeya/id 14]}
+       {:rikishi/id 17 :rikishi/shikona "琴奨菊" :rikishi/banduke "東前頭四枚目" :rikishi/syusshinchi "福岡県" :rikishi/sumobeya [:sumobeya/id 15]}
+       {:rikishi/id 18 :rikishi/shikona "隠岐の海" :rikishi/banduke "西前頭四枚目" :rikishi/syusshinchi "島根県" :rikishi/sumobeya [:sumobeya/id 41]}
+       {:rikishi/id 19 :rikishi/shikona "碧山" :rikishi/banduke "東前頭五枚目" :rikishi/syusshinchi "ブルガリア" :rikishi/sumobeya [:sumobeya/id 2]}
+       {:rikishi/id 20 :rikishi/shikona "嘉風" :rikishi/banduke "西前頭五枚目" :rikishi/syusshinchi "大分県" :rikishi/sumobeya [:sumobeya/id 16]}
+       {:rikishi/id 21 :rikishi/shikona "千代大龍" :rikishi/banduke "東前頭六枚目" :rikishi/syusshinchi "東京都" :rikishi/sumobeya [:sumobeya/id 40]}
+       {:rikishi/id 22 :rikishi/shikona "阿武咲" :rikishi/banduke "西前頭六枚目" :rikishi/syusshinchi "青森県" :rikishi/sumobeya [:sumobeya/id 25]}
+       {:rikishi/id 23 :rikishi/shikona "竜電" :rikishi/banduke "東前頭七枚目" :rikishi/syusshinchi "山梨県" :rikishi/sumobeya [:sumobeya/id 21]}
+       {:rikishi/id 24 :rikishi/shikona "大栄翔" :rikishi/banduke "西前頭七枚目" :rikishi/syusshinchi "埼玉県" :rikishi/sumobeya [:sumobeya/id 35]}
+       {:rikishi/id 25 :rikishi/shikona "魁聖" :rikishi/banduke "東前頭八枚目" :rikishi/syusshinchi "ブラジル" :rikishi/sumobeya [:sumobeya/id 43]}
+       {:rikishi/id 26 :rikishi/shikona "朝乃山" :rikishi/banduke "西前頭八枚目" :rikishi/syusshinchi "富山県" :rikishi/sumobeya [:sumobeya/id 37]}
+       {:rikishi/id 27 :rikishi/shikona "貴ノ岩" :rikishi/banduke "東前頭九枚目" :rikishi/syusshinchi "モンゴル" :rikishi/sumobeya [:sumobeya/id 26]}
+       {:rikishi/id 28 :rikishi/shikona "遠藤" :rikishi/banduke "西前頭九枚目" :rikishi/syusshinchi "石川県" :rikishi/sumobeya [:sumobeya/id 35]}
+       {:rikishi/id 29 :rikishi/shikona "宝富士" :rikishi/banduke "東前頭十枚目" :rikishi/syusshinchi "青森県" :rikishi/sumobeya [:sumobeya/id 42]}
+       {:rikishi/id 30 :rikishi/shikona "阿炎" :rikishi/banduke "西前頭十枚目" :rikishi/syusshinchi "埼玉県" :rikishi/sumobeya [:sumobeya/id 28]}
+       {:rikishi/id 31 :rikishi/shikona "佐田の海" :rikishi/banduke "東前頭十一枚目" :rikishi/syusshinchi "熊本県" :rikishi/sumobeya [:sumobeya/id 12]}
+       {:rikishi/id 32 :rikishi/shikona "勢" :rikishi/banduke "西前頭十一枚目" :rikishi/syusshinchi "大阪府" :rikishi/sumobeya [:sumobeya/id 31]}
+       {:rikishi/id 33 :rikishi/shikona "輝" :rikishi/banduke "東前頭十二枚目" :rikishi/syusshinchi "石川県" :rikishi/sumobeya [:sumobeya/id 21]}
+       {:rikishi/id 34 :rikishi/shikona "明生" :rikishi/banduke "西前頭十二枚目" :rikishi/syusshinchi "鹿児島県" :rikishi/sumobeya [:sumobeya/id 13]}
+       {:rikishi/id 35 :rikishi/shikona "矢後" :rikishi/banduke "東前頭十三枚目" :rikishi/syusshinchi "北海道" :rikishi/sumobeya [:sumobeya/id 16]}
+       {:rikishi/id 36 :rikishi/shikona "琴勇輝" :rikishi/banduke "西前頭十三枚目" :rikishi/syusshinchi "香川県" :rikishi/sumobeya [:sumobeya/id 15]}
+       {:rikishi/id 37 :rikishi/shikona "豊山" :rikishi/banduke "東前頭十四枚目" :rikishi/syusshinchi "新潟県" :rikishi/sumobeya [:sumobeya/id 29]}
+       {:rikishi/id 38 :rikishi/shikona "千代翔馬" :rikishi/banduke "西前頭十四枚目" :rikishi/syusshinchi "モンゴル" :rikishi/sumobeya [:sumobeya/id 40]}
+       {:rikishi/id 39 :rikishi/shikona "千代の国" :rikishi/banduke "東前頭十五枚目" :rikishi/syusshinchi "三重県" :rikishi/sumobeya [:sumobeya/id 40]}
+       {:rikishi/id 40 :rikishi/shikona "琴恵光" :rikishi/banduke "西前頭十五枚目" :rikishi/syusshinchi "宮崎県" :rikishi/sumobeya [:sumobeya/id 15]}
+       {:rikishi/id 41 :rikishi/shikona "大奄美" :rikishi/banduke "東前頭十六枚目" :rikishi/syusshinchi "鹿児島県" :rikishi/sumobeya [:sumobeya/id 35]}
+       {:rikishi/id 42 :rikishi/shikona "大翔丸" :rikishi/banduke "西前頭十六枚目" :rikishi/syusshinchi "大阪府" :rikishi/sumobeya [:sumobeya/id 35]}
+       {:rikishi/id 43 :rikishi/shikona "照強" :rikishi/banduke "東十両筆頭" :rikishi/syusshinchi "兵庫県" :rikishi/sumobeya [:sumobeya/id 42]}
+       {:rikishi/id 44 :rikishi/shikona "大翔鵬" :rikishi/banduke "西十両筆頭" :rikishi/syusshinchi "モンゴル" :rikishi/sumobeya [:sumobeya/id 35]}
+       {:rikishi/id 45 :rikishi/shikona "貴源治" :rikishi/banduke "東十両二枚目" :rikishi/syusshinchi "栃木県" :rikishi/sumobeya [:sumobeya/id 26]}
+       {:rikishi/id 46 :rikishi/shikona "隆の勝" :rikishi/banduke "西十両二枚目" :rikishi/syusshinchi "千葉県" :rikishi/sumobeya [:sumobeya/id 26]}
+       {:rikishi/id 47 :rikishi/shikona "安美錦" :rikishi/banduke "東十両三枚目" :rikishi/syusshinchi "青森県" :rikishi/sumobeya [:sumobeya/id 42]}
+       {:rikishi/id 48 :rikishi/shikona "石浦" :rikishi/banduke "西十両三枚目" :rikishi/syusshinchi "鳥取県" :rikishi/sumobeya [:sumobeya/id 44]}
+       {:rikishi/id 49 :rikishi/shikona "友風" :rikishi/banduke "東十両四枚目" :rikishi/syusshinchi "神奈川県" :rikishi/sumobeya [:sumobeya/id 16]}
+       {:rikishi/id 50 :rikishi/shikona "徳勝龍" :rikishi/banduke "西十両四枚目" :rikishi/syusshinchi "奈良県" :rikishi/sumobeya [:sumobeya/id 7]}
+       {:rikishi/id 51 :rikishi/shikona "若隆景" :rikishi/banduke "東十両五枚目" :rikishi/syusshinchi "福島県" :rikishi/sumobeya [:sumobeya/id 30]}
+       {:rikishi/id 52 :rikishi/shikona "豊ノ島" :rikishi/banduke "西十両五枚目" :rikishi/syusshinchi "高知県" :rikishi/sumobeya [:sumobeya/id 29]}
+       {:rikishi/id 53 :rikishi/shikona "白鷹山" :rikishi/banduke "東十両六枚目" :rikishi/syusshinchi "山形県" :rikishi/sumobeya [:sumobeya/id 21]}
+       {:rikishi/id 54 :rikishi/shikona "千代丸" :rikishi/banduke "西十両六枚目" :rikishi/syusshinchi "鹿児島県" :rikishi/sumobeya [:sumobeya/id 40]}
+       {:rikishi/id 55 :rikishi/shikona "東龍" :rikishi/banduke "東十両七枚目" :rikishi/syusshinchi "モンゴル" :rikishi/sumobeya [:sumobeya/id 3]}
+       {:rikishi/id 56 :rikishi/shikona "明瀬山" :rikishi/banduke "西十両七枚目" :rikishi/syusshinchi "愛知県" :rikishi/sumobeya [:sumobeya/id 7]}
+       {:rikishi/id 57 :rikishi/shikona "炎鵬" :rikishi/banduke "東十両八枚目" :rikishi/syusshinchi "石川県" :rikishi/sumobeya [:sumobeya/id 44]}
+       {:rikishi/id 58 :rikishi/shikona "英乃海" :rikishi/banduke "西十両八枚目" :rikishi/syusshinchi "東京都" :rikishi/sumobeya [:sumobeya/id 7]}
+       {:rikishi/id 59 :rikishi/shikona "旭大星" :rikishi/banduke "東十両九枚目" :rikishi/syusshinchi "北海道" :rikishi/sumobeya [:sumobeya/id 43]}
+       {:rikishi/id 60 :rikishi/shikona "水戸龍" :rikishi/banduke "西十両九枚目" :rikishi/syusshinchi "モンゴル" :rikishi/sumobeya [:sumobeya/id 39]}
+       {:rikishi/id 61 :rikishi/shikona "荒鷲" :rikishi/banduke "東十両十枚目" :rikishi/syusshinchi "モンゴル" :rikishi/sumobeya [:sumobeya/id 22]}
+       {:rikishi/id 62 :rikishi/shikona "翔猿" :rikishi/banduke "西十両十枚目" :rikishi/syusshinchi "東京都" :rikishi/sumobeya [:sumobeya/id 35]}
+       {:rikishi/id 63 :rikishi/shikona "志摩ノ海" :rikishi/banduke "東十両十一枚目" :rikishi/syusshinchi "三重県" :rikishi/sumobeya [:sumobeya/id 7]}
+       {:rikishi/id 64 :rikishi/shikona "剣翔" :rikishi/banduke "西十両十一枚目" :rikishi/syusshinchi "東京都" :rikishi/sumobeya [:sumobeya/id 35]}
+       {:rikishi/id 65 :rikishi/shikona "豪風" :rikishi/banduke "東十両十二枚目" :rikishi/syusshinchi "秋田県" :rikishi/sumobeya [:sumobeya/id 16]}
+       {:rikishi/id 66 :rikishi/shikona "蒼国来" :rikishi/banduke "西十両十二枚目" :rikishi/syusshinchi "中国" :rikishi/sumobeya [:sumobeya/id 30]}
+       {:rikishi/id 67 :rikishi/shikona "旭秀鵬" :rikishi/banduke "東十両十三枚目" :rikishi/syusshinchi "モンゴル" :rikishi/sumobeya [:sumobeya/id 43]}
+       {:rikishi/id 68 :rikishi/shikona "常幸龍" :rikishi/banduke "西十両十三枚目" :rikishi/syusshinchi "東京都" :rikishi/sumobeya [:sumobeya/id 7]}
+       {:rikishi/id 69 :rikishi/shikona "臥牙丸" :rikishi/banduke "東十両十四枚目" :rikishi/syusshinchi "ジョージア" :rikishi/sumobeya [:sumobeya/id 7]}
+       {:rikishi/id 70 :rikishi/shikona "千代の海" :rikishi/banduke "西十両十四枚目" :rikishi/syusshinchi "高知県" :rikishi/sumobeya [:sumobeya/id 40]}]}}
