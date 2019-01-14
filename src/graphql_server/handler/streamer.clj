@@ -1,16 +1,34 @@
 (ns graphql-server.handler.streamer
-  (:require [integrant.core :as ig]))
+  (:require [integrant.core :as ig]
+            [clojure.core.async :refer [chan go-loop go >! <! timeout close!] :as async]))
 
-(defmethod ig/init-key ::stream-torikumi [_ {:keys [datomic]}]
+(defmethod ig/init-key ::stream-torikumis [_ {:keys [datomic ch]}]
   (fn [context args source-stream]
-    (println context)
-    (println "start!")
-    ;; Create an object for the subscription.
-    (source-stream {:id 12121 :name "Test"})
-    #_(let [subscription (create-log-subscription)]
-        (on-publish subscription
-                    (fn [log-event]
-                      (-> log-event :payload source-stream)))
-        ;; Return a function to cleanup the subscription
-        #(stop-log-subscription subscription))
+    (println "start!" ch source-stream)
+    ;;(source-stream [{:id 2 :kimarite :TSUKIDASHI}])
+    (go-loop []
+      (when-let [data (<! ch)] ; チャネルを読む
+        (do
+          (println source-stream)
+          (source-stream [{:id 2 :kimarite :OSHIDASHI}])
+          (println "!!!")))
+      (recur))
     #(println "stop!")))
+
+(comment
+  (def ch (chan))
+
+  (go (>! ch "test4"))
+  (go-loop []
+    (when (>! ch "test") ; チャネルに書く
+      (<! (timeout 2000)) ; 2秒待つ
+      (recur)))
+
+  (go (>! ch "test"))
+
+  (go-loop []
+    (when-let [date (<! ch)] ; チャネルを読む
+      (println "now:" date)
+      (recur)))
+
+  (close! ch))

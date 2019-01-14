@@ -6,6 +6,8 @@
    :token-cache-expire #duct/env ["TOKEN_CACHE_EXPIRE" Int :or 600000]
    :refresh-token-cache-expire #duct/env ["REFRESH_TOKEN_CACHE_EXPIRE" Int :or 600000]}
 
+  :graphql-server/channel {}
+
   :duct.server/pedestal {:service #ig/ref :graphql-server.lacinia/service}
   :duct.migrator/datomic {:schema #ig/ref :graphql-server.datomic/schema}
 
@@ -34,7 +36,7 @@
                :get-sumobeya #ig/ref :graphql-server.handler.resolver/get-sumobeya
                :get-rikishi-by-shikona  #ig/ref :graphql-server.handler.resolver/get-rikishi-by-shikona
                :create-rikishi #ig/ref :graphql-server.handler.resolver/create-rikishi}
-   :streamers {:stream-torikumi #ig/ref :graphql-server.handler.streamer/stream-torikumi}}
+   :streamers {:stream-torikumis #ig/ref :graphql-server.handler.streamer/stream-torikumis}}
 
   :graphql-server.interceptor/body-params {}
   :graphql-server.interceptor/auth {:auth #ig/ref :graphql-server/auth}
@@ -54,7 +56,8 @@
   :graphql-server.handler.resolver/get-sumobeya {:datomic #ig/ref :duct.database/datomic}
   :graphql-server.handler.resolver/get-rikishi-by-shikona {:datomic #ig/ref :duct.database/datomic}
   :graphql-server.handler.resolver/create-rikishi {:datomic #ig/ref :duct.database/datomic}
-  :graphql-server.handler.streamer/stream-torikumi {:datomic #ig/ref :duct.database/datomic}
+  :graphql-server.handler.streamer/stream-torikumis {:datomic #ig/ref :duct.database/datomic
+                                                     :ch #ig/ref :graphql-server/channel}
 
   [:duct.migrator.ragtime/sql :graphql-server.migration/ddl-20190101-00-add-user]
   {:up ["CREATE TABLE \"user\" (

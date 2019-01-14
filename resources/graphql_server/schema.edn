@@ -20,22 +20,9 @@
     :datomic/tag false
     :lacinia/resolve :sumobeya-rikishis} rikishis]
 
- ^{:enum true}
- class
- [YOKODUNA OZEKI SEKIWAKE KOMUSUBI MAEGASHIRA JURYO MAKUSHITA SANDANME JONIDAN JONOKUCHI MAEZUMO]
-
- basho
- [^Integer year
-  ^bashomei bashomei]
-
- ^{:enum true}
- bashomei
- [HATSUBASHO HARUBASHO NATSUBASHO NAGOYABASHO AKIBASHO KYUSHUBASHO]
-
  torikumi
- [^Integer id
-  ^basho basho
-  ^Integer hiduke
+ [^{:type Integer
+    :datomic/unique :db.unique/identity} id
   ^rikishi higashi
   ^rikishi nishi
   ^rikishi shiroboshi
@@ -74,4 +61,5 @@
  ^:lacinia/subscription
  SubscriptionRoot
  [^{:type torikumi
-    :lacinia/stream :stream-torikumi} torikumi []]]
+    :cardinality [0 n]
+    :lacinia/stream :stream-torikumis} torikumis [^Integer num]]]
