@@ -40,6 +40,22 @@
   OKURIGAKE OKURIHIKIOTOSHI WARIDASHI UTCHARI KIMEDASHI KIMETAOSHI USHIROMOTARE YOBIMODOSHI ISAMIASHI KOSHIKUDAKE
   TSUKITE TSUKIHIZA FUMIDASHI]
 
+ user
+ [^{:type Integer
+    :datomic/unique :db.unique/identity} id
+  ^{:type String
+    :datomic/unique :db.unique/identity} email-address
+  ^String password]
+
+ client
+ [^{:type String
+    :datomic/unique :db.unique/identity} client-id
+  ^String client-secret
+  ^String client-type
+  ^String redirect-uris
+  ^String application-name
+  ^String application-type]
+
  ^:lacinia/query
  QueryRoot
  [^{:type sumobeya
