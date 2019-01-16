@@ -57,7 +57,7 @@
   :graphql-server.handler.resolver/get-rikishi-by-shikona {:datomic #ig/ref :duct.database/datomic}
   :graphql-server.handler.resolver/create-rikishi {:datomic #ig/ref :duct.database/datomic}
   :graphql-server.handler.streamer/stream-torikumis {:datomic #ig/ref :duct.database/datomic
-                                                     :ch #ig/ref :graphql-server/channel}
+                                                     :channel #ig/ref :graphql-server/channel}
 
   [:duct.migrator.ragtime/sql :graphql-server.migration/ddl-20190101-00-add-user]
   {:up ["CREATE TABLE \"user\" (

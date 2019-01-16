@@ -36,5 +36,6 @@
         service-map (lacinia/service-map compiled-schema
                                          (assoc options
                                                 :routes routes
+                                                :keep-alive-ms 1000
                                                 :subscription-interceptors subscription-interceptors))]
     service-map))
