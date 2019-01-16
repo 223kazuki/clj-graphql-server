@@ -32,7 +32,7 @@
   duct.database.sql.Boundary
   (get-user-by-mail [{:keys [spec]} mail]
     (let [[user] (jdbc/query spec ["SELECT * FROM \"user\" WHERE email_address = ?" mail])]
-      user))
+      (->entity user)))
   duct.database.datomic.Boundary
   (get-user-by-mail [{:keys [connection]} mail]
     (-> (d/db connection)
@@ -44,7 +44,7 @@
   (find-client-by-id [{:keys [spec]} client-id]
     (let [[client]
           (jdbc/query spec ["SELECT * FROM client where client_id = ?" client-id])]
-      client))
+      (->entity client)))
   duct.database.datomic.Boundary
   (find-client-by-id [{:keys [connection]} client-id]
     (-> (d/db connection)

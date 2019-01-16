@@ -41,15 +41,15 @@
 
 (defn- get-redirect-uri
   [redirect-uri response-type client]
-  (let [{:keys [client_type redirect_uris]} client
-        redirect-uris (some-> redirect_uris
+  (let [{:keys [client-type redirect-uris]} client
+        redirect-uris (some-> redirect-uris
                               (clojure.string/split #" "))
         specified-redirect-uri (when redirect-uri (java.net.URI. redirect-uri))]
     (when-not (or (and (empty? redirect-uris)
-                       (or (= client_type "PUBLIC")
+                       (or (= client-type "PUBLIC")
                            (= response-type "token")))
                   (if (nil? redirect-uri)
-                    (not= 1 (count redirect_uris))
+                    (not= 1 (count redirect-uris))
                     (if (empty? redirect-uris)
                       (or (not (.isAbsolute specified-redirect-uri))
                           (.getFragment specified-redirect-uri))
@@ -67,10 +67,10 @@
                                              (= (.getPath specified-redirect-uri) (.getPath registerd)))))
                                     redirect-uris)))))
       (let [redirect-uri (if (and (nil? redirect-uri)
-                                  (= 1 (count redirect_uris)))
+                                  (= 1 (count redirect-uris)))
                            (first redirect-uri)
                            redirect-uri)]
-        (condp = (:application_type client)
+        (condp = (:application-type client)
           "WEB"    (when-not (and (= response-type "token")
                                   (or (not= "https" (.getScheme (java.net.URI. redirect-uri)))
                                       (= "localhost" (.getHost (java.net.URI. redirect-uri)))))
@@ -108,12 +108,12 @@
               :else
               (let [code (auth/new-code auth {:client_id client_id
                                               :redirect_uri ((-> client
-                                                                 :redirect_uris
+                                                                 :redirect-uris
                                                                  (clojure.string/split #" ")
                                                                  set) redirect_uri)
                                               :explicit-redirect-uri? explicit-redirect-uri?
                                               :scope scope
-                                              :user (select-keys user [:id :email_address])})]
+                                              :user (select-keys user [:id :email-address])})]
                 {:status 302 :headers {"Location" (format "%s?code=%s&state=%s" redirect_uri code state)}}))
 
             "token"
@@ -124,12 +124,12 @@
               :else
               (let [code (auth/new-code auth {:client_id client_id
                                               :redirect_uri ((-> client
-                                                                 :redirect_uris
+                                                                 :redirect-uris
                                                                  (clojure.string/split #" ")
                                                                  set) redirect_uri)
                                               :explicit-redirect-uri? explicit-redirect-uri?
                                               :scope scope
-                                              :user (select-keys user [:id :email_address])})]
+                                              :user (select-keys user [:id :email-address])})]
                 (if-let [access-token (and (db/find-client-by-id db client_id)
                                            (auth/new-token auth code client_id redirect_uri))]
                   (let [{:keys [token-type expires-in client]} (auth/get-auth auth access-token)]

@@ -48,10 +48,10 @@
   {:name  :test.interceptor/check-context
    :enter (fn [context]
             ;; TODO: check token.
-            (println
-             "token: "
-             (get-in context
-                     [:request :token]))
+            #_(println
+               "token: "
+               (get-in context
+                       [:request :token]))
             context)
    :leave (fn [context]
             ;; TODO: close ws.
