@@ -1,17 +1,4 @@
-{:duct.database/sql
- {:connection-uri "jdbc:postgresql://localhost:5432/graphql_server?user=postgres&password=tisus"}
-
- :graphql-server/visualizer-schema {:schema #duct/include "graphql_server/schema"}
-
- :duct.migrator/ragtime
- {:migrations [#ig/ref :graphql-server.migration/test-data]}
-
- [:duct.migrator.ragtime/sql :graphql-server.migration/test-data]
- {:up ["INSERT INTO \"user\" VALUES
-       (0,'rixi223.kazuki@gmail.com','bcrypt+sha512$be56e562199786db653be0826da93320$12$952a3e4c7b286cce6765750d98adc5756f758118c3d6c4e6')"
-       "INSERT INTO client VALUES ('fe6af238-20ca-4682-a50c-630092edddc9','1e40afe0-2f52-421e-9f26-ef93482c9369','PUBLIC','http://localhost:3000/cb','Clj GraphQL Client','WEB')"]
-  :down ["DELETE FROM client"
-         "DELETE FROM \"user\""]}
+{:graphql-server/visualizer-schema {:schema #duct/include "graphql_server/schema"}
 
  :duct.database/datomic
  {:connection-uri "datomic:free://127.0.0.1:4334/graphql_server"}

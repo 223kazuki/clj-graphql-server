@@ -45,9 +45,9 @@
   :graphql-server.interceptor/cors {}
 
   :graphql-server.handler.auth/login-page {}
-  :graphql-server.handler.auth/login {:auth #ig/ref :graphql-server/auth :db #ig/ref :duct.database/sql}
-  :graphql-server.handler.auth/token {:auth #ig/ref :graphql-server/auth :db #ig/ref :duct.database/sql}
-  :graphql-server.handler.auth/introspect {:auth #ig/ref :graphql-server/auth :db #ig/ref :duct.database/sql}
+  :graphql-server.handler.auth/login {:auth #ig/ref :graphql-server/auth :db #ig/ref :duct.database/datomic}
+  :graphql-server.handler.auth/token {:auth #ig/ref :graphql-server/auth :db #ig/ref :duct.database/datomic}
+  :graphql-server.handler.auth/introspect {:auth #ig/ref :graphql-server/auth :db #ig/ref :duct.database/datomic}
   :graphql-server.handler.cors/preflight {}
 
   :graphql-server.handler.resolver/get-rikishi {:datomic #ig/ref :duct.database/datomic}
@@ -57,32 +57,12 @@
   :graphql-server.handler.resolver/get-rikishi-by-shikona {:datomic #ig/ref :duct.database/datomic}
   :graphql-server.handler.resolver/create-rikishi {:datomic #ig/ref :duct.database/datomic}
   :graphql-server.handler.streamer/stream-torikumis {:datomic #ig/ref :duct.database/datomic
-                                                     :channel #ig/ref :graphql-server/channel}
-
-  [:duct.migrator.ragtime/sql :graphql-server.migration/ddl-20190101-00-add-user]
-  {:up ["CREATE TABLE \"user\" (
-          id SERIAL PRIMARY KEY,
-          email_address varchar unique not null,
-          password varchar not null)"]
-   :down ["DROP TABLE \"user\""]}
-  [:duct.migrator.ragtime/sql :graphql-server.migration/ddl-20190101-01-add-client]
-  {:up ["CREATE TABLE client (
-          client_id varchar,
-          client_secret varchar,
-          client_type varchar,
-          redirect_uris varchar,
-          application_name varchar,
-          application_type varchar)"]
-   :down ["DROP TABLE client"]}
-  :duct.migrator/ragtime
-  {:migrations [#ig/ref :graphql-server.migration/ddl-20190101-00-add-user
-                #ig/ref :graphql-server.migration/ddl-20190101-01-add-client]}}
+                                                     :channel #ig/ref :graphql-server/channel}}
 
  :duct.profile/dev   #duct/include "dev"
  :duct.profile/local #duct/include "local"
  :duct.profile/prod  {}
 
  :duct.module/logging {}
- :duct.module/sql {}
  :duct.module/datomic {}
  :duct.module/pedestal {}}

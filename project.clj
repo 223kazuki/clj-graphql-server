@@ -6,7 +6,6 @@
                  [duct/core "0.7.0"]
                  [duct/module.logging "0.4.0"]
                  [duct/module.web "0.7.0"]
-                 [duct/module.sql "0.5.0"]
                  [duct.module.pedestal "2.0.0"]
                  [org.postgresql/postgresql "42.2.5"]
                  [com.datomic/datomic-free "0.9.5697" :exclusions [com.google.guava/guava]]
