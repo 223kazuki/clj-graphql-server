@@ -2,7 +2,7 @@
   (:require [integrant.core :as ig]
             [clojure.core.async :refer [pub sub chan go-loop go >! <! timeout close! >!! <!! unsub] :as async]))
 
-(defmethod ig/init-key ::stream-torikumis [_ {:keys [datomic channel]}]
+(defmethod ig/init-key ::stream-torikumis [_ {:keys [db channel]}]
   (fn [context args source-stream]
     (println "Start subscription.")
     (source-stream [{:id 1 :kimarite (rand-nth [:OSHIDASHI :TSUKIDASHI :UWATENAGE])}])

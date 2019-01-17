@@ -3,6 +3,8 @@
  :duct.database/datomic
  {:connection-uri "datomic:free://127.0.0.1:4334/graphql_server"}
 
+ :graphql-server/spec {:dev? true}
+
  :duct.migrator/datomic {:migrations [#ig/ref :graphql-server.migration/test-client
                                       #ig/ref :graphql-server.migration/test-user
                                       #ig/ref :graphql-server.migration/test-sumobeya

@@ -14,6 +14,8 @@
   :graphql-server/hodur {:schema #duct/include "graphql_server/schema"}
   :graphql-server.datomic/schema {:meta-db #ig/ref :graphql-server/hodur}
   :graphql-server.lacinia/schema {:meta-db #ig/ref :graphql-server/hodur}
+  :graphql-server/spec {:meta-db #ig/ref :graphql-server/hodur}
+
   :graphql-server.lacinia/service
   {:graphiql true
    :port #duct/env ["PORT" Int :or 8080]
@@ -50,13 +52,13 @@
   :graphql-server.handler.auth/introspect {:auth #ig/ref :graphql-server/auth :db #ig/ref :duct.database/datomic}
   :graphql-server.handler.cors/preflight {}
 
-  :graphql-server.handler.resolver/get-rikishi {:datomic #ig/ref :duct.database/datomic}
-  :graphql-server.handler.resolver/rikishi-sumobeya {:datomic #ig/ref :duct.database/datomic}
-  :graphql-server.handler.resolver/sumobeya-rikishis {:datomic #ig/ref :duct.database/datomic}
-  :graphql-server.handler.resolver/get-sumobeya {:datomic #ig/ref :duct.database/datomic}
-  :graphql-server.handler.resolver/get-rikishi-by-shikona {:datomic #ig/ref :duct.database/datomic}
-  :graphql-server.handler.resolver/create-rikishi {:datomic #ig/ref :duct.database/datomic}
-  :graphql-server.handler.streamer/stream-torikumis {:datomic #ig/ref :duct.database/datomic
+  :graphql-server.handler.resolver/get-rikishi {:db #ig/ref :duct.database/datomic}
+  :graphql-server.handler.resolver/rikishi-sumobeya {:db #ig/ref :duct.database/datomic}
+  :graphql-server.handler.resolver/sumobeya-rikishis {:db #ig/ref :duct.database/datomic}
+  :graphql-server.handler.resolver/get-sumobeya {:db #ig/ref :duct.database/datomic}
+  :graphql-server.handler.resolver/get-rikishi-by-shikona {:db #ig/ref :duct.database/datomic}
+  :graphql-server.handler.resolver/create-rikishi {:db #ig/ref :duct.database/datomic}
+  :graphql-server.handler.streamer/stream-torikumis {:db #ig/ref :duct.database/datomic
                                                      :channel #ig/ref :graphql-server/channel}}
 
  :duct.profile/dev   #duct/include "dev"
