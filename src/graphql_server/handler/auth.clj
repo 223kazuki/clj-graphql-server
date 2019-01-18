@@ -5,29 +5,32 @@
             [hiccup.page :refer [html5 include-css]]
             [buddy.hashers :as hashers]
             [graphql-server.boundary.auth :as auth]
-            [graphql-server.boundary.db :as db]))
+            [graphql-server.boundary.db :as db])
+  (:import
+   (org.eclipse.jetty.websocket.api UpgradeResponse)))
 
 (defn- login-form [{error :error {:keys [:username]} :form}]
   {:status 200 :headers {"Content-Type" "text/html"}
-   :body (html5
-          [:head
-           [:meta {:charset "utf-8"}]
-           [:meta {:name "viewport" :content "width=device-width, initial-scale=1"}]
-           [:link {:rel "stylesheet" :href "https://unpkg.com/purecss@1.0.0/build/pure-min.css"}]
-           [:link {:rel "stylesheet" :href "https://unpkg.com/purecss@1.0.0/build/grids-responsive-min.css"}]
-           [:title "Login"]]
-          [:body
-           [:div.pure-g {:style "margin-top: 100px"}
-            [:div.pure-u-1-24.pure-u-md-1-3]
-            [:div.pure-u-22-24.pure-u-md-1-3
-             (when error [:p {:style "color: red"} error])
-             [:form.pure-form.pure-form-stacked {:method "post"}
-              [:fieldset
-               [:label {:for "username"} "User ID"]
-               [:input#username {:name "username" :placeholder "example@example.com" :value username}]
-               [:label {:for "password"} "Password"]
-               [:input#password {:type "password" :name "password" :maxlength 16}]]
-              [:button.pure-button.pure-button-primary {:type "submit"} "Login"]]]]])})
+   :body
+   (html5
+    [:head
+     [:meta {:charset "utf-8"}]
+     [:meta {:name "viewport" :content "width=device-width, initial-scale=1"}]
+     [:link {:rel "stylesheet" :href "https://unpkg.com/purecss@1.0.0/build/pure-min.css"}]
+     [:link {:rel "stylesheet" :href "https://unpkg.com/purecss@1.0.0/build/grids-responsive-min.css"}]
+     [:title "Login"]]
+    [:body
+     [:div.pure-g {:style "margin-top: 100px"}
+      [:div.pure-u-1-24.pure-u-md-1-3]
+      [:div.pure-u-22-24.pure-u-md-1-3
+       (when error [:p {:style "color: red"} error])
+       [:form.pure-form.pure-form-stacked {:method "post"}
+        [:fieldset
+         [:label {:for "username"} "User ID"]
+         [:input#username {:name "username" :placeholder "example@example.com" :value username}]
+         [:label {:for "password"} "Password"]
+         [:input#password {:type "password" :name "password" :maxlength 16}]]
+        [:button.pure-button.pure-button-primary {:type "submit"} "Login"]]]]])})
 
 (defn- get-port-or-default-port
   [uri]
@@ -188,3 +191,20 @@
                                           :client_id  (:client_id client)
                                           :token_type "bearer"
                                           :username   (get-in client [:account :email_address])})})))
+
+(defmethod ig/init-key ::ws-init-context [_ {:keys [auth]}]
+  (fn [ctx req ^UpgradeResponse res]
+    ;;(println ctx)
+    (if-let [token (some->> (.getCookies req)
+                            (filter #(= "token" (.getName %)))
+                            first
+                            (#(.getValue %)))]
+      (if-let [{{:keys [user]} :client} (auth/get-auth auth token)]
+        (do
+          (assoc ctx :user user))
+        (do
+          (.sendForbidden res "Forbidden")
+          ctx))
+      (do
+        (.sendForbidden res "Forbidden")
+        ctx))))

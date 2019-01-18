@@ -19,8 +19,9 @@
   :graphql-server.lacinia/service
   {:graphiql true
    :port #duct/env ["PORT" Int :or 8080]
-
    :subscriptions true
+   :init-context #ig/ref :graphql-server.handler.auth/ws-init-context
+
    :optional-interceptors [#ig/ref :graphql-server.interceptor/auth]
    :optional-subscription-interceptors [#ig/ref :graphql-server.interceptor/ws-auth]
    :optional-routes
@@ -50,6 +51,7 @@
   :graphql-server.handler.auth/login {:auth #ig/ref :graphql-server/auth :db #ig/ref :duct.database/datomic}
   :graphql-server.handler.auth/token {:auth #ig/ref :graphql-server/auth :db #ig/ref :duct.database/datomic}
   :graphql-server.handler.auth/introspect {:auth #ig/ref :graphql-server/auth :db #ig/ref :duct.database/datomic}
+  :graphql-server.handler.auth/ws-init-context {:auth #ig/ref :graphql-server/auth :db #ig/ref :duct.database/datomic}
   :graphql-server.handler.cors/preflight {}
 
   :graphql-server.handler.resolver/get-rikishi {:db #ig/ref :duct.database/datomic}

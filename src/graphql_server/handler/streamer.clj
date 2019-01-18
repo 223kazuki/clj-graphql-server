@@ -1,6 +1,7 @@
 (ns graphql-server.handler.streamer
   (:require [integrant.core :as ig]
-            [clojure.core.async :refer [pub sub chan go-loop go >! <! timeout close! >!! <!! unsub] :as async]))
+            [clojure.core.async :refer [pub sub chan go-loop go >! <!
+                                        timeout close! >!! <!! unsub] :as async]))
 
 (defmethod ig/init-key ::stream-torikumis [_ {:keys [db channel]}]
   (fn [context args source-stream]
