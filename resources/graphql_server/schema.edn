@@ -49,7 +49,11 @@
   ^{:type String
     :datomic/unique :db.unique/identity} email-address
   ^{:type String
-    :lacinia/tag false} password]
+    :lacinia/tag false} password
+  ^{:type rikishi
+    :cardinality [0 n]
+    :spec/tag false
+    :lacinia/resolve :user-favorite-rikishis} favorite-rikishis]
 
  ^{:lacinia/tag false}
  client

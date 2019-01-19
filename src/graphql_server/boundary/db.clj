@@ -19,7 +19,8 @@
   (find-rikishis-by-sumobeya-id [db sumobeya-id])
   (create-rikishi [db rikishi])
   (find-sumobeya-by-id [db id])
-  (find-sumobeya-by-rikishi-id [db rikishi-id]))
+  (find-sumobeya-by-rikishi-id [db rikishi-id])
+  (find-favorite-rikishis-by-user-id [db user-id]))
 
 (defn database?
   [db]
@@ -84,4 +85,15 @@
     (-> (d/db connection)
         (d/pull '[{:rikishi/sumobeya [*]}] [:rikishi/id rikishi-id])
         :rikishi/sumobeya
-        (->entity))))
+        (->entity)))
+  (find-favorite-rikishis-by-user-id [{:keys [connection]} user-id]
+    (let [db (d/db connection)
+          rikishis (-> (d/db connection)
+                       (d/pull '[{:user/favorite-rikishis [*]}] [:user/id user-id])
+                       :user/favorite-rikishis)]
+      (map ->entity rikishis))))
+
+(comment
+  (find-favorite-rikishis-by-user-id (:duct.database/datomic integrant.repl.state/system)
+                                     0)
+  (db/pull (d/db (:connection ))))

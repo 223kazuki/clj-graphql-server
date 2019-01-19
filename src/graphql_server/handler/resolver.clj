@@ -12,6 +12,14 @@
     (let [{:keys [id email-address]} (get-in request [:auth-info :client :user])]
       (->lacinia {:id id :email-address email-address}))))
 
+(defmethod ig/init-key ::user-favorite-rikishis [_ {:keys [db]}]
+  (fn [ctx args user]
+    (let [{:keys [id]} user
+          rikishis
+          (->> (db/find-favorite-rikishis-by-user-id db id)
+               (map ->lacinia))]
+      rikishis)))
+
 (defmethod ig/init-key ::get-rikishi [_ {:keys [db]}]
   (fn [ctx args value]
     (let [{:keys [id]} args

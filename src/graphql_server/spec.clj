@@ -34,7 +34,10 @@
     :ret ::sumobeya)
   (s/fdef db/find-sumobeya-by-rikishi-id
     :args (s/cat :db ::db :rikishi-id :graphql-server.spec.rikishi/id)
-    :ret ::sumobeya))
+    :ret ::sumobeya)
+  (s/fdef db/find-favorite-rikishis-by-user-id
+    :args (s/cat :db ::db :user-id :graphql-server.spec.user/id)
+    :ret (s/coll-of ::rikishi)))
 
 (defmethod ig/init-key :graphql-server/spec [_ {:keys [dev? meta-db] :as options}]
   (let [spec (hodur-spec/schema meta-db {:prefix :graphql-server.spec})]

@@ -29,6 +29,7 @@
     ["/graphql"    :options [#ig/ref :graphql-server.handler.cors/preflight] :route-name :preflight]]
    :schema #ig/ref :graphql-server.lacinia/schema
    :resolvers {:get-viewer #ig/ref :graphql-server.handler.resolver/get-viewer
+               :user-favorite-rikishis #ig/ref :graphql-server.handler.resolver/user-favorite-rikishis
                :get-rikishi #ig/ref :graphql-server.handler.resolver/get-rikishi
                :rikishi-sumobeya #ig/ref :graphql-server.handler.resolver/rikishi-sumobeya
                :sumobeya-rikishis #ig/ref :graphql-server.handler.resolver/sumobeya-rikishis
@@ -49,6 +50,7 @@
   :graphql-server.handler.auth/ws-init-context {:auth #ig/ref :graphql-server/auth :db #ig/ref :duct.database/datomic}
   :graphql-server.handler.cors/preflight {}
   :graphql-server.handler.resolver/get-viewer {:auth #ig/ref :graphql-server/auth}
+  :graphql-server.handler.resolver/user-favorite-rikishis {:db #ig/ref :duct.database/datomic}
   :graphql-server.handler.resolver/get-rikishi {:db #ig/ref :duct.database/datomic}
   :graphql-server.handler.resolver/rikishi-sumobeya {:db #ig/ref :duct.database/datomic}
   :graphql-server.handler.resolver/sumobeya-rikishis {:db #ig/ref :duct.database/datomic}
