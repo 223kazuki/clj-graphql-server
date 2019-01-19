@@ -48,8 +48,10 @@
     :datomic/unique :db.unique/identity} id
   ^{:type String
     :datomic/unique :db.unique/identity} email-address
-  ^String password]
+  ^{:type String
+    :lacinia/tag false} password]
 
+ ^{:lacinia/tag false}
  client
  [^{:type String
     :datomic/unique :db.unique/identity} client-id
@@ -61,7 +63,9 @@
 
  ^:lacinia/query
  QueryRoot
- [^{:type sumobeya
+ [^{:type user
+    :lacinia/resolve :get-viewer} viewer []
+  ^{:type sumobeya
     :lacinia/resolve :get-sumobeya} sumobeya [^{:type Integer
                                                 :default 1} id]
   ^{:type rikishi

@@ -16,10 +16,8 @@
 
 (defmethod ig/init-key ::check-context [_ options]
   {:name  ::check-context
-   :enter (fn [context]
-            (println "!!!" (:path-info (:request context))) context)
-   :leave (fn [context]
-            context)})
+   :enter (fn [context] context)
+   :leave (fn [context] context)})
 
 (defmethod ig/init-key ::auth [_ {:keys [:auth]}]
   {:name  ::auth
@@ -28,16 +26,15 @@
                                       :headers {"Content-Type" "application/json"
                                                 "Access-Control-Allow-Origin" (get headers "origin")}
                                       :body (json/write-str {:errors [{:message "Forbidden"}]})}]
-              (println "auth leave headers: " headers)
               (if-not (and (= uri "/graphql")
                            (= request-method :post))
                 context
-                (if-let [access_token (some-> headers
+                (if-let [access-token (some-> headers
                                               (get "authorization")
                                               (str/split #"Bearer ")
                                               last
                                               str/trim)]
-                  (if-let [auth-info (auth/get-auth auth access_token)]
-                    context
+                  (if-let [auth-info (auth/get-auth auth access-token)]
+                    (assoc-in context [:request :auth-info] auth-info)
                     (assoc context :response forbidden-response))
                   (assoc context :response forbidden-response)))))})

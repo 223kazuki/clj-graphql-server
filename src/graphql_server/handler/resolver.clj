@@ -7,6 +7,11 @@
 (defn- ->lacinia [m]
   (transform-keys cnk/->camelCaseKeyword m))
 
+(defmethod ig/init-key ::get-viewer [_ {:keys [auth db]}]
+  (fn [{{:keys [:headers :uri :request-method] :as request} :request :as ctx} args value]
+    (let [{:keys [id email-address]} (get-in request [:auth-info :client :user])]
+      (->lacinia {:id id :email-address email-address}))))
+
 (defmethod ig/init-key ::get-rikishi [_ {:keys [db]}]
   (fn [ctx args value]
     (let [{:keys [id]} args

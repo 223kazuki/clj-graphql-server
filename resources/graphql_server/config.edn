@@ -5,7 +5,6 @@
   {:code-cache-expire #duct/env ["CODE_CACHE_EXPIRE" Int :or 600000]
    :token-cache-expire #duct/env ["TOKEN_CACHE_EXPIRE" Int :or 600000]
    :refresh-token-cache-expire #duct/env ["REFRESH_TOKEN_CACHE_EXPIRE" Int :or 600000]}
-
   :graphql-server/channel {}
 
   :duct.server/pedestal {:service #ig/ref :graphql-server.lacinia/service}
@@ -20,9 +19,7 @@
   {:port #duct/env ["PORT" Int :or 8080]
    :subscriptions true
    :init-context #ig/ref :graphql-server.handler.auth/ws-init-context
-
    :optional-interceptors [#ig/ref :graphql-server.interceptor/auth]
-   :optional-subscription-interceptors []
    :optional-routes
    [["/login"      :get  [#ig/ref :graphql-server.handler.auth/login-page] :route-name :login-page]
     ["/login"      :post [#ig/ref :graphql-server.interceptor/body-params
@@ -30,9 +27,9 @@
     ["/token"      :post [#ig/ref :graphql-server.handler.auth/token] :route-name :token]
     ["/introspect" :get  [#ig/ref :graphql-server.handler.auth/introspect] :route-name :introspect]
     ["/graphql"    :options [#ig/ref :graphql-server.handler.cors/preflight] :route-name :preflight]]
-
    :schema #ig/ref :graphql-server.lacinia/schema
-   :resolvers {:get-rikishi #ig/ref :graphql-server.handler.resolver/get-rikishi
+   :resolvers {:get-viewer #ig/ref :graphql-server.handler.resolver/get-viewer
+               :get-rikishi #ig/ref :graphql-server.handler.resolver/get-rikishi
                :rikishi-sumobeya #ig/ref :graphql-server.handler.resolver/rikishi-sumobeya
                :sumobeya-rikishis #ig/ref :graphql-server.handler.resolver/sumobeya-rikishis
                :get-sumobeya #ig/ref :graphql-server.handler.resolver/get-sumobeya
@@ -51,7 +48,7 @@
   :graphql-server.handler.auth/introspect {:auth #ig/ref :graphql-server/auth :db #ig/ref :duct.database/datomic}
   :graphql-server.handler.auth/ws-init-context {:auth #ig/ref :graphql-server/auth :db #ig/ref :duct.database/datomic}
   :graphql-server.handler.cors/preflight {}
-
+  :graphql-server.handler.resolver/get-viewer {:auth #ig/ref :graphql-server/auth}
   :graphql-server.handler.resolver/get-rikishi {:db #ig/ref :duct.database/datomic}
   :graphql-server.handler.resolver/rikishi-sumobeya {:db #ig/ref :duct.database/datomic}
   :graphql-server.handler.resolver/sumobeya-rikishis {:db #ig/ref :duct.database/datomic}
