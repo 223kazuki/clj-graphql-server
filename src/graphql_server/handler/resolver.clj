@@ -8,13 +8,21 @@
   (transform-keys cnk/->camelCaseKeyword m))
 
 (defmethod ig/init-key ::get-viewer [_ {:keys [auth db]}]
-  (fn [{{:keys [:headers :uri :request-method] :as request} :request :as ctx} args value]
+  (fn [{request :request :as ctx} args value]
     (let [{:keys [id email-address]} (get-in request [:auth-info :client :user])]
       (->lacinia {:id id :email-address email-address}))))
 
 (defmethod ig/init-key ::user-favorite-rikishis [_ {:keys [db]}]
   (fn [ctx args user]
     (let [{:keys [id]} user
+          rikishis
+          (->> (db/find-favorite-rikishis-by-user-id db id)
+               (map ->lacinia))]
+      rikishis)))
+
+(defmethod ig/init-key ::get-favorite-rikishis [_ {:keys [db]}]
+  (fn [{request :request :as ctx} args _]
+    (let [{:keys [id]} (get-in request [:auth-info :client :user])
           rikishis
           (->> (db/find-favorite-rikishis-by-user-id db id)
                (map ->lacinia))]

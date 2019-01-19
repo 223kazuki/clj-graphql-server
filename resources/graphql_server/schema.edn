@@ -70,14 +70,14 @@
  [^{:type user
     :lacinia/resolve :get-viewer} viewer []
   ^{:type sumobeya
-    :lacinia/resolve :get-sumobeya} sumobeya [^{:type Integer
-                                                :default 1} id]
+    :lacinia/resolve :get-sumobeya} sumobeya [^{:type Integer} id]
   ^{:type rikishi
-    :lacinia/resolve :get-rikishi} rikishi [^{:type Integer
-                                              :default 1} id]
+    :cardinality [0 n]
+    :lacinia/resolve :get-favorite-rikishis} favorite-rikishis []
   ^{:type rikishi
-    :lacinia/resolve :get-rikishi-by-shikona} rikishi-by-shikona [^{:type String
-                                                                    :default "白鵬"} shikona]]
+    :lacinia/resolve :get-rikishi} rikishi [^{:type Integer} id]
+  ^{:type rikishi
+    :lacinia/resolve :get-rikishi-by-shikona} rikishi-by-shikona [^{:type String} shikona]]
  ^:lacinia/mutation
  MutationRoot
  [^{:type rikishi
