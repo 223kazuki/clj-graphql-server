@@ -5,6 +5,20 @@
 
  :graphql-server/spec {:dev? true}
 
+ :graphql-server.lacinia/service
+ {:graphiql true
+  :ide-path "/#"
+  :optional-routes [["/" :get [#ig/ref :graphql-server.handler.graphiql/ide-with-token]
+                     :route-name :graphiql-ide-index]]}
+
+ :graphql-server.handler.graphiql/ide-with-token
+ {:auth #ig/ref :graphql-server/auth
+  :mock-client {:client_id "fe6af238-20ca-4682-a50c-630092edddc9"
+                :redirect_uri "http://localhost:3000/cb"
+                :explicit-redirect-uri? true
+                :scope "DEFAULT"
+                :user {:id 0 :email-address "rixi223.kazuki@gmail.com"}}}
+
  :duct.migrator/datomic {:migrations [#ig/ref :graphql-server.migration/test-client
                                       #ig/ref :graphql-server.migration/test-user
                                       #ig/ref :graphql-server.migration/test-sumobeya

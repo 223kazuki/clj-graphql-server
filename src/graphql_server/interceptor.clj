@@ -24,35 +24,20 @@
 (defmethod ig/init-key ::auth [_ {:keys [:auth]}]
   {:name  ::auth
    :enter (fn [{{:keys [:headers :uri :request-method] :as request} :request :as context}]
-            (if (= (get headers "host") "localhost:8080")
-              context
-              (let [forbidden-response {:status 403
-                                        :headers {"Content-Type" "application/json"
-                                                  "Access-Control-Allow-Origin" (get headers "origin")}
-                                        :body (json/write-str {:errors [{:message "Forbidden"}]})}]
-                (println "auth leave headers: " headers)
-                (if-not (and (= uri "/graphql")
-                             (= request-method :post))
-                  context
-                  (if-let [access_token (some-> headers
-                                                (get "authorization")
-                                                (str/split #"Bearer ")
-                                                last
-                                                str/trim)]
-                    (if-let [auth-info (auth/get-auth auth access_token)]
-                      context
-                      (assoc context :response forbidden-response))
-                    (assoc context :response forbidden-response))))))})
-
-(defmethod ig/init-key ::ws-auth [_ {:keys [:auth]}]
-  {:name  :test.interceptor/check-context
-   :enter (fn [context]
-            ;; TODO: check token.
-            #_(println
-               "token: "
-               (get-in context
-                       [:request :token]))
-            context)
-   :leave (fn [context]
-            ;; TODO: close ws.
-            context)})
+            (let [forbidden-response {:status 403
+                                      :headers {"Content-Type" "application/json"
+                                                "Access-Control-Allow-Origin" (get headers "origin")}
+                                      :body (json/write-str {:errors [{:message "Forbidden"}]})}]
+              (println "auth leave headers: " headers)
+              (if-not (and (= uri "/graphql")
+                           (= request-method :post))
+                context
+                (if-let [access_token (some-> headers
+                                              (get "authorization")
+                                              (str/split #"Bearer ")
+                                              last
+                                              str/trim)]
+                  (if-let [auth-info (auth/get-auth auth access_token)]
+                    context
+                    (assoc context :response forbidden-response))
+                  (assoc context :response forbidden-response)))))})

@@ -7,7 +7,7 @@
             [graphql-server.boundary.auth :as auth]
             [graphql-server.boundary.db :as db])
   (:import
-   (org.eclipse.jetty.websocket.api UpgradeResponse)))
+   (org.eclipse.jetty.websocket.api UpgradeRequest UpgradeResponse)))
 
 (defn- login-form [{error :error {:keys [:username]} :form}]
   {:status 200 :headers {"Content-Type" "text/html"}
@@ -193,12 +193,9 @@
                                           :username   (get-in client [:account :email_address])})})))
 
 (defmethod ig/init-key ::ws-init-context [_ {:keys [auth]}]
-  (fn [ctx req ^UpgradeResponse res]
-    ;;(println ctx)
-    (if-let [token (some->> (.getCookies req)
-                            (filter #(= "token" (.getName %)))
-                            first
-                            (#(.getValue %)))]
+  (fn [ctx ^UpgradeRequest req ^UpgradeResponse res]
+    (if-let [token (some->> (.get (.getParameterMap req) "token")
+                            first)]
       (if-let [{{:keys [user]} :client} (auth/get-auth auth token)]
         (do
           (assoc ctx :user user))
