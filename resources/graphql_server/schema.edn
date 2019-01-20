@@ -84,7 +84,13 @@
     :lacinia/resolve :create-rikishi} create-rikishi [^String shikona
                                                       ^String banduke
                                                       ^String syusshinchi
-                                                      ^Integer sumobeya-id]]
+                                                      ^Integer sumobeya-id]
+  ^{:type rikishi
+    :cardinality [0 n]
+    :lacinia/resolve :fav-rikishi}　fav-rikishi [ ^Integer rikishi-id]
+  ^{:type rikishi
+    :cardinality [0 n]
+    :lacinia/resolve :unfav-rikishi}　unfav-rikishi [ ^Integer rikishi-id]]
  ^:lacinia/subscription
  SubscriptionRoot
  [^{:type torikumi

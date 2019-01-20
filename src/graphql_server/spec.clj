@@ -37,6 +37,12 @@
     :ret ::sumobeya)
   (s/fdef db/find-favorite-rikishis-by-user-id
     :args (s/cat :db ::db :user-id :graphql-server.spec.user/id)
+    :ret (s/coll-of ::rikishi))
+  (s/fdef db/fav-rikishi
+    :args (s/cat :db ::db :user-id :graphql-server.spec.user/id :rikishi-id :graphql-server.spec.rikishi/id)
+    :ret (s/coll-of ::rikishi))
+  (s/fdef db/unfav-rikishi
+    :args (s/cat :db ::db :user-id :graphql-server.spec.user/id :rikishi-id :graphql-server.spec.rikishi/id)
     :ret (s/coll-of ::rikishi)))
 
 (defmethod ig/init-key :graphql-server/spec [_ {:keys [dev? meta-db] :as options}]

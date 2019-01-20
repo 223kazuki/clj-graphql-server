@@ -20,7 +20,9 @@
   (create-rikishi [db rikishi])
   (find-sumobeya-by-id [db id])
   (find-sumobeya-by-rikishi-id [db rikishi-id])
-  (find-favorite-rikishis-by-user-id [db user-id]))
+  (find-favorite-rikishis-by-user-id [db user-id])
+  (fav-rikishi [db user-id rikishi-id])
+  (unfav-rikishi [db user-id rikishi-id]))
 
 (defn database?
   [db]
@@ -88,12 +90,31 @@
         (->entity)))
   (find-favorite-rikishis-by-user-id [{:keys [connection]} user-id]
     (let [db (d/db connection)
-          rikishis (-> (d/db connection)
+          rikishis (-> db
+                       (d/pull '[{:user/favorite-rikishis [*]}] [:user/id user-id])
+                       :user/favorite-rikishis)]
+      (map ->entity rikishis)))
+  (fav-rikishi [{:keys [connection] :as db} user-id rikishi-id]
+    (let [{:keys [db-after]} @(d/transact connection
+                                          [[:db/add [:user/id user-id] :user/favorite-rikishis [:rikishi/id rikishi-id]]])
+          rikishis (-> db-after
+                       (d/pull '[{:user/favorite-rikishis [*]}] [:user/id user-id])
+                       :user/favorite-rikishis)]
+      (map ->entity rikishis)))
+  (unfav-rikishi [{:keys [connection] :as db} user-id rikishi-id]
+    (let [{:keys [db-after]} @(d/transact connection
+                                          [[:db/retract [:user/id user-id] :user/favorite-rikishis [:rikishi/id rikishi-id]]])
+          rikishis (-> db-after
                        (d/pull '[{:user/favorite-rikishis [*]}] [:user/id user-id])
                        :user/favorite-rikishis)]
       (map ->entity rikishis))))
 
 (comment
-  (find-favorite-rikishis-by-user-id (:duct.database/datomic integrant.repl.state/system)
-                                     0)
-  (db/pull (d/db (:connection ))))
+  (count
+   (find-favorite-rikishis-by-user-id (:duct.database/datomic integrant.repl.state/system)
+                                      0))
+
+  (count (fav-rikishi (:duct.database/datomic integrant.repl.state/system)
+                      0 11))
+  (count (unfav-rikishi (:duct.database/datomic integrant.repl.state/system)
+                        0 11)))

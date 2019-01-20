@@ -68,3 +68,21 @@
                                          :syusshinchi syusshinchi
                                          :sumobeya-id sumobeyaId})]
       (->lacinia rikishi))))
+
+(defmethod ig/init-key ::fav-rikishi [_ {:keys [db]}]
+  (fn [{request :request :as ctx} args _]
+    (let [{:keys [rikishiId]} args
+          {:keys [id]} (get-in request [:auth-info :client :user])
+          rikishis
+          (->> (db/fav-rikishi db id rikishiId)
+               (map ->lacinia))]
+      rikishis)))
+
+(defmethod ig/init-key ::unfav-rikishi [_ {:keys [db]}]
+  (fn [{request :request :as ctx} args _]
+    (let [{:keys [rikishiId]} args
+          {:keys [id]} (get-in request [:auth-info :client :user])
+          rikishis
+          (->> (db/unfav-rikishi db id rikishiId)
+               (map ->lacinia))]
+      rikishis)))
