@@ -38,7 +38,8 @@
                :get-rikishi-by-shikona  #ig/ref :graphql-server.handler.resolver/get-rikishi-by-shikona
                :create-rikishi #ig/ref :graphql-server.handler.resolver/create-rikishi
                :fav-rikishi  #ig/ref :graphql-server.handler.resolver/fav-rikishi
-               :unfav-rikishi  #ig/ref :graphql-server.handler.resolver/unfav-rikishi}
+               :unfav-rikishi  #ig/ref :graphql-server.handler.resolver/unfav-rikishi
+               :get-rikishis #ig/ref :graphql-server.handler.resolver/get-rikishis}
    :streamers {:stream-torikumis #ig/ref :graphql-server.handler.streamer/stream-torikumis}}
 
   :graphql-server.interceptor/body-params {}
@@ -63,6 +64,7 @@
   :graphql-server.handler.resolver/create-rikishi {:db #ig/ref :duct.database/datomic}
   :graphql-server.handler.resolver/fav-rikishi {:auth #ig/ref :graphql-server/auth :db #ig/ref :duct.database/datomic}
   :graphql-server.handler.resolver/unfav-rikishi {:auth #ig/ref :graphql-server/auth :db #ig/ref :duct.database/datomic}
+  :graphql-server.handler.resolver/get-rikishis {:db #ig/ref :duct.database/datomic}
   :graphql-server.handler.streamer/stream-torikumis {:db #ig/ref :duct.database/datomic
                                                      :channel #ig/ref :graphql-server/channel}}
 

@@ -22,7 +22,8 @@
   (find-sumobeya-by-rikishi-id [db rikishi-id])
   (find-favorite-rikishis-by-user-id [db user-id])
   (fav-rikishi [db user-id rikishi-id])
-  (unfav-rikishi [db user-id rikishi-id]))
+  (unfav-rikishi [db user-id rikishi-id])
+  (find-rikishis [db before after first last]))
 
 (defn database?
   [db]
@@ -107,7 +108,32 @@
           rikishis (-> db-after
                        (d/pull '[{:user/favorite-rikishis [*]}] [:user/id user-id])
                        :user/favorite-rikishis)]
-      (map ->entity rikishis))))
+      (map ->entity rikishis)))
+  (find-rikishis [{:keys [connection]} before after first last]
+    (let [db (d/db connection)
+          ids (->> db
+                   (d/q '[:find ?e
+                          :where [?e :rikishi/id]])
+                   (sort-by first)
+                   (map first))
+          _edges (cond->> ids
+                   after (filter #(<= % after))
+                   before (filter #(>= % before)))
+          edges (cond->> _edges
+                  first (take first)
+                  last (take-last last)
+                  true (d/pull-many db '[*])
+                  true (map #(hash-map :cursor (:db/id %)
+                                       :node (->entity %))))
+          page-info (cond-> {:has-next-page false
+                             :has-previous-page false}
+                      (and last (< last (count _edges))) (assoc :has-previous-page true)
+                      (and after (not-empty (filter #(> % after) ids))) (assoc :has-previous-page true)
+                      (and first (< first (count _edges))) (assoc :has-next-page true)
+                      (and before (not-empty (filter #(< % before) ids))) (assoc :has-next-page true)
+                      true (assoc :start-cursor (:db/id (first edges)))
+                      true (assoc :end-cursor (:db/id (last edges))))]
+      {:total-count (count ids) :page-info page-info :edges edges})))
 
 (comment
   (count
@@ -117,4 +143,24 @@
   (count (fav-rikishi (:duct.database/datomic integrant.repl.state/system)
                       0 11))
   (count (unfav-rikishi (:duct.database/datomic integrant.repl.state/system)
-                        0 11)))
+                        0 11))
+
+  (let [db (-> (:duct.database/datomic integrant.repl.state/system)
+               :connection
+               d/db)
+        ids
+        (->> db
+             (d/q '[:find ?e
+                    :where [?e :rikishi/id]])
+             (sort-by first)
+             (map first)
+             (d/pull-many db '[*])
+             )]
+    ids)
+
+  (split-with (partial == 3) [1 2 3 4 5])
+  (take-while zero? [-2 -1 0 1 2 3])
+
+  (d/pull (d/db (:connection ))
+          '[*] )
+  )

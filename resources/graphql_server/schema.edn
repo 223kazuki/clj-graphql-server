@@ -65,6 +65,26 @@
   ^String application-name
   ^String application-type]
 
+ ^{:datomic/tag false}
+ page-info
+ [^String start-cursor
+  ^String end-cursor
+  ^Boolean has-previous-page
+  ^Boolean has-next-page]
+
+ ^{:datomic/tag false}
+ rikishi-edge
+ [^String cursor
+  ^rikishi node]
+
+ ^{:datomic/tag false}
+ rikishi-connection
+ [^Integer total-count
+  ^{:type page-info} page-info
+  ^{:type rikishi-edge
+    :cardinality [0 n]
+    :spec/tag false} edges]
+
  ^:lacinia/query
  QueryRoot
  [^{:type user
@@ -77,7 +97,12 @@
   ^{:type rikishi
     :lacinia/resolve :get-rikishi} rikishi [^{:type Integer} id]
   ^{:type rikishi
-    :lacinia/resolve :get-rikishi-by-shikona} rikishi-by-shikona [^{:type String} shikona]]
+    :lacinia/resolve :get-rikishi-by-shikona} rikishi-by-shikona [^{:type String} shikona]
+  ^{:type rikishi-connection
+    :lacinia/resolve :get-rikishis} rikishis [^Integer first
+                                              ^String after
+                                              ^Integer last
+                                              ^String before]]
  ^:lacinia/mutation
  MutationRoot
  [^{:type rikishi
@@ -87,10 +112,10 @@
                                                       ^Integer sumobeya-id]
   ^{:type rikishi
     :cardinality [0 n]
-    :lacinia/resolve :fav-rikishi}　fav-rikishi [ ^Integer rikishi-id]
+    :lacinia/resolve :fav-rikishi}　fav-rikishi [^Integer rikishi-id]
   ^{:type rikishi
     :cardinality [0 n]
-    :lacinia/resolve :unfav-rikishi}　unfav-rikishi [ ^Integer rikishi-id]]
+    :lacinia/resolve :unfav-rikishi}　unfav-rikishi [^Integer rikishi-id]]
  ^:lacinia/subscription
  SubscriptionRoot
  [^{:type torikumi
