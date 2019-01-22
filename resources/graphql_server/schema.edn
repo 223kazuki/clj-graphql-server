@@ -99,10 +99,14 @@
   ^{:type rikishi
     :lacinia/resolve :get-rikishi-by-shikona} rikishi-by-shikona [^{:type String} shikona]
   ^{:type rikishi-connection
-    :lacinia/resolve :get-rikishis} rikishis [^Integer first
-                                              ^String after
-                                              ^Integer last
-                                              ^String before]]
+    :lacinia/resolve :get-rikishis} rikishis [^{:type Integer
+                                                :optional true} first
+                                              ^{:type String
+                                                :optional true} after
+                                              ^{:type Integer
+                                                :optional true} last
+                                              ^{:type String
+                                                :optional true} before]]
  ^:lacinia/mutation
  MutationRoot
  [^{:type rikishi
