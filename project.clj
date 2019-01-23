@@ -13,6 +13,7 @@
                  [org.clojure/core.cache "0.7.2"]
                  [org.clojure/data.json "0.2.6"]
                  [buddy/buddy-hashers "1.3.0"]
+                 [clj-base64 "0.0.3"]
 
                  [com.walmartlabs/lacinia "0.31.0"]
                  [com.walmartlabs/lacinia-pedestal "0.11.0"]

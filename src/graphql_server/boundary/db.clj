@@ -2,7 +2,8 @@
   (:require [duct.database.datomic]
             [datomic.api :as d]
             [camel-snake-kebab.core :as cnk]
-            [camel-snake-kebab.extras :refer [transform-keys]]))
+            [camel-snake-kebab.extras :refer [transform-keys]]
+            [remvee.base64 :refer [encode-str decode-str]]))
 
 (defn- ->entity [m]
   (transform-keys cnk/->kebab-case-keyword
@@ -109,30 +110,33 @@
                        (d/pull '[{:user/favorite-rikishis [*]}] [:user/id user-id])
                        :user/favorite-rikishis)]
       (map ->entity rikishis)))
-  (find-rikishis [{:keys [connection]} before after first last]
-    (let [db (d/db connection)
+  (find-rikishis [{:keys [connection]} before after first-n last-n]
+    (let [before (when before (biginteger (decode-str before)))
+          after (when after (biginteger (decode-str after)))
+          db (d/db connection)
           ids (->> db
                    (d/q '[:find ?e
                           :where [?e :rikishi/id]])
                    (sort-by first)
                    (map first))
           _edges (cond->> ids
-                   after (filter #(<= % after))
-                   before (filter #(>= % before)))
+                   after (filter #(>= % after))
+                   before (filter #(<= % before)))
           edges (cond->> _edges
-                  first (take first)
-                  last (take-last last)
+                  first-n (take first-n)
+                  last-n (take-last last-n)
                   true (d/pull-many db '[*])
-                  true (map #(hash-map :cursor (:db/id %)
+                  true (map #(hash-map :cursor (encode-str (str (:db/id %)))
                                        :node (->entity %))))
           page-info (cond-> {:has-next-page false
                              :has-previous-page false}
-                      (and last (< last (count _edges))) (assoc :has-previous-page true)
+                      (and last-n (< last-n (count _edges))) (assoc :has-previous-page true)
                       (and after (not-empty (filter #(> % after) ids))) (assoc :has-previous-page true)
-                      (and first (< first (count _edges))) (assoc :has-next-page true)
+                      (and first-n (< first-n (count _edges))) (assoc :has-next-page true)
                       (and before (not-empty (filter #(< % before) ids))) (assoc :has-next-page true)
-                      true (assoc :start-cursor (:db/id (first edges)))
-                      true (assoc :end-cursor (:db/id (last edges))))]
+                      true (assoc :start-cursor (:cursor (first edges)))
+                      true (assoc :end-cursor (:cursor (last edges))))]
+      (println {:total-count (count ids) :page-info page-info :edges edges})
       {:total-count (count ids) :page-info page-info :edges edges})))
 
 (comment
@@ -153,8 +157,7 @@
              (d/q '[:find ?e
                     :where [?e :rikishi/id]])
              (sort-by first)
-             (map first)
-             (d/pull-many db '[*])
+
              )]
     ids)
 
