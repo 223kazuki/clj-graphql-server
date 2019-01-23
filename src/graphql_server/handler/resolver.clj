@@ -94,5 +94,5 @@
           after (when after (Integer/parseInt after))
           rikishis (-> (db/find-rikishis db before after first last)
                        ->lacinia
-                       (update-in [:edges] #(map ->lacinia)))]
+                       (update-in [:edges] #(map ->lacinia %)))]
       rikishis)))

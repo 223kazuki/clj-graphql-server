@@ -136,7 +136,6 @@
                       (and before (not-empty (filter #(< % before) ids))) (assoc :has-next-page true)
                       true (assoc :start-cursor (:cursor (first edges)))
                       true (assoc :end-cursor (:cursor (last edges))))]
-      (println {:total-count (count ids) :page-info page-info :edges edges})
       {:total-count (count ids) :page-info page-info :edges edges})))
 
 (comment

@@ -194,11 +194,10 @@
 
 (defmethod ig/init-key ::ws-init-context [_ {:keys [auth]}]
   (fn [ctx ^UpgradeRequest req ^UpgradeResponse res]
-    (if-let [token (some->> (.get (.getParameterMap req) "token")
-                            first)]
-      (if-let [{{:keys [user]} :client} (auth/get-auth auth token)]
-        (do
-          (assoc ctx :user user))
+    (if-let [access-token (some->> (.get (.getParameterMap req) "token")
+                                   first)]
+      (if-let [auth-info (auth/get-auth auth access-token)]
+        (assoc-in ctx [:request :auth-info] auth-info)
         (do
           (.sendForbidden res "Forbidden")
           ctx))
