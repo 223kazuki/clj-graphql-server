@@ -90,8 +90,6 @@
 (defmethod ig/init-key ::get-rikishis [_ {:keys [db]}]
   (fn [ctx args _]
     (let [{:keys [first after last before]} args
-          before (when before (Integer/parseInt before))
-          after (when after (Integer/parseInt after))
           rikishis (-> (db/find-rikishis db before after first last)
                        ->lacinia
                        (update-in [:edges] #(map ->lacinia %)))]
