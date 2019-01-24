@@ -3,6 +3,10 @@
  :duct.database/datomic
  {:connection-uri "datomic:free://127.0.0.1:4334/graphql_server"}
 
+ :graphql-server/auth
+ {:code-cache-expire 9999999999
+  :token-cache-expire 9999999999
+  :refresh-token-cache-expire 9999999999}
  :graphql-server/spec {:dev? true}
 
  :graphql-server.lacinia/service
@@ -25,7 +29,7 @@
                                       #ig/ref :graphql-server.migration/test-user]}
 
  [:duct.migrator.datomic/transactions :graphql-server.migration/test-client]
- {:up [{:user/id 0 :user/email-address "rixi223.kazuki@gmail.com" :user/password "bcrypt+sha512$be56e562199786db653be0826da93320$12$952a3e4c7b286cce6765750d98adc5756f758118c3d6c4e6"
+ {:up [{:user/id 0 :user/email-address "test@example.com" :user/password "bcrypt+sha512$be56e562199786db653be0826da93320$12$952a3e4c7b286cce6765750d98adc5756f758118c3d6c4e6"
         :user/favorite-rikishis [[:rikishi/id 12]
                                  [:rikishi/id 13]
                                  [:rikishi/id 14]]}]}
