@@ -7,7 +7,10 @@
             [hodur-engine.core :as engine]
             [hodur-lacinia-schema.core :as hodur-lacinia]
             [io.pedestal.interceptor :as interceptor]
-            [com.walmartlabs.lacinia.pedestal.subscriptions :refer [default-subscription-interceptors]]))
+            [com.walmartlabs.lacinia.pedestal.subscriptions :refer [exception-handler-interceptor
+                                                                    send-operation-response-interceptor
+                                                                    query-parser-interceptor
+                                                                    execute-operation-interceptor]]))
 
 (defmethod ig/init-key ::schema [_ {:keys [:meta-db]}]
   (-> meta-db
@@ -25,7 +28,10 @@
                           (concat optional-interceptors)
                           (map interceptor/map->Interceptor)
                           (into []))
-        subscription-interceptors (->> (default-subscription-interceptors compiled-schema nil)
+        subscription-interceptors (->> [exception-handler-interceptor
+                                        send-operation-response-interceptor
+                                        (query-parser-interceptor compiled-schema)
+                                        execute-operation-interceptor]
                                        (concat optional-subscription-interceptors)
                                        (map interceptor/map->Interceptor)
                                        (into []))

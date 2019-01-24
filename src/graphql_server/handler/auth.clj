@@ -197,7 +197,7 @@
     (if-let [access-token (some->> (.get (.getParameterMap req) "token")
                                    first)]
       (if-let [auth-info (auth/get-auth auth access-token)]
-        (assoc-in ctx [:request :auth-info] auth-info)
+        (assoc-in ctx [:request :lacinia-app-context :request :auth-info] auth-info)
         (do
           (.sendForbidden res "Forbidden")
           ctx))
