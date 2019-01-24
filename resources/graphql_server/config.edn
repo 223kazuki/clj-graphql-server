@@ -1,6 +1,12 @@
 {:duct.profile/base
  {:duct.core/project-ns graphql-server
 
+  :duct.scheduler/simple
+  {:jobs [{:interval 10 :run #ig/ref :graphql-server/dohyo}]}
+
+  :graphql-server/dohyo {:db #ig/ref :duct.database/datomic
+                         :channel #ig/ref :graphql-server/channel}
+
   :graphql-server/auth
   {:code-cache-expire #duct/env ["CODE_CACHE_EXPIRE" Int :or 600000]
    :token-cache-expire #duct/env ["TOKEN_CACHE_EXPIRE" Int :or 600000]

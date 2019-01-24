@@ -43,7 +43,16 @@
     :ret (s/coll-of ::rikishi))
   (s/fdef db/unfav-rikishi
     :args (s/cat :db ::db :user-id :graphql-server.spec.user/id :rikishi-id :graphql-server.spec.rikishi/id)
-    :ret (s/coll-of ::rikishi)))
+    :ret (s/coll-of ::rikishi))
+  (s/def :graphql-server.spec.torikumi/higashi  :graphql-server.spec.rikishi/id)
+  (s/def :graphql-server.spec.torikumi/nishi  :graphql-server.spec.rikishi/id)
+  (s/def :graphql-server.spec.torikumi/shiroboshi  :graphql-server.spec.rikishi/id)
+  (s/fdef db/create-torikumi
+    :args (s/cat :db ::db :torikumi (s/keys :req-un [:graphql-server.spec.torikumi/higashi
+                                                     :graphql-server.spec.torikumi/nishi
+                                                     :graphql-server.spec.torikumi/shiroboshi
+                                                     :graphql-server.spec.torikumi/kimarite]))
+    :ret ::torikumi))
 
 (defmethod ig/init-key :graphql-server/spec [_ {:keys [dev? meta-db] :as options}]
   (let [spec (hodur-spec/schema meta-db {:prefix :graphql-server.spec})]

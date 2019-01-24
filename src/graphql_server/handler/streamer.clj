@@ -6,7 +6,7 @@
 (defmethod ig/init-key ::stream-torikumis [_ {:keys [db channel]}]
   (fn [context args source-stream]
     (println "Start subscription.")
-    (source-stream [{:id 1 :kimarite (rand-nth [:OSHIDASHI :TSUKIDASHI :UWATENAGE])}])
+    (source-stream [{:kimarite (rand-nth [:OSHIDASHI :TSUKIDASHI :UWATENAGE])}])
     (let [{:keys [publication]} channel
           subscription (chan)]
       (sub publication :torikumi/updated subscription)
@@ -14,7 +14,7 @@
         (when-let [{:keys [data]} (<! subscription)]
           (do
             (println "Subscription received data" data)
-            (source-stream [{:id 2 :kimarite (rand-nth [:OSHIDASHI :TSUKIDASHI :UWATENAGE])}])
+            (source-stream [{:kimarite (rand-nth [:OSHIDASHI :TSUKIDASHI :UWATENAGE])}])
             (recur))))
       #(do
          (println "Stop subscription.")

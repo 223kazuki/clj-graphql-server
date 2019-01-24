@@ -24,7 +24,8 @@
   (find-favorite-rikishis-by-user-id [db user-id])
   (fav-rikishi [db user-id rikishi-id])
   (unfav-rikishi [db user-id rikishi-id])
-  (find-rikishis [db before after first last]))
+  (find-rikishis [db before after first last])
+  (create-torikumi [db torikumi]))
 
 (defn database?
   [db]
@@ -136,12 +137,28 @@
                       (and before (not-empty (filter #(< % before) ids))) (assoc :has-next-page true)
                       true (assoc :start-cursor (:cursor (first edges)))
                       true (assoc :end-cursor (:cursor (last edges))))]
-      {:total-count (count ids) :page-info page-info :edges edges})))
+      {:total-count (count ids) :page-info page-info :edges edges}))
+  (create-torikumi [{:keys [connection]} torikumi]
+    (let [db (d/db connection)
+          {:keys [higashi nishi shiroboshi kimarite]} torikumi
+          torikumi (->namespaced-map "torikumi"
+                                     {:higashi [:rikishi/id higashi]
+                                      :nishi [:rikishi/id nishi]
+                                      :shiroboshi [:rikishi/id shiroboshi]
+                                      :kimarite (keyword "kimarite" (clojure.string/lower-case kimarite))})]
+      (let [_ @(d/transact connection [torikumi])]
+        (->entity torikumi)))))
 
 (comment
   (count
    (find-favorite-rikishis-by-user-id (:duct.database/datomic integrant.repl.state/system)
                                       0))
+
+  (create-torikumi (:duct.database/datomic integrant.repl.state/system)
+                   {:higashi 1
+                    :nishi 2
+                    :shiroboshi 3
+                    :kimarite "OSHIDASHI"})
 
   (count (fav-rikishi (:duct.database/datomic integrant.repl.state/system)
                       0 11))
@@ -154,10 +171,8 @@
         ids
         (->> db
              (d/q '[:find ?e
-                    :where [?e :rikishi/id]])
-             (sort-by first)
-
-             )]
+                    :where [?e :torikumi/higashi]])
+             (sort-by first))]
     ids)
 
   (split-with (partial == 3) [1 2 3 4 5])
