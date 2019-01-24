@@ -120,8 +120,8 @@
                    (sort-by first)
                    (map first))
           _edges (cond->> ids
-                   after (filter #(>= % after))
-                   before (filter #(<= % before)))
+                   after (filter #(> % after))
+                   before (filter #(< % before)))
           edges (cond->> _edges
                   first-n (take first-n)
                   last-n (take-last last-n)
