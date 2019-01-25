@@ -13,20 +13,20 @@
   (transform-keys #(keyword ns (name %)) map))
 
 (defprotocol IDatabase
-  (get-user-by-mail [db mail])
-  (find-client-by-id [db client-id])
-  (find-rikishi-by-id [db id])
-  (find-rikishi-by-shikona [db shikona])
-  (find-rikishis-by-sumobeya-id [db sumobeya-id])
-  (create-rikishi [db rikishi])
-  (find-sumobeya-by-id [db id])
-  (find-sumobeya-by-rikishi-id [db rikishi-id])
-  (find-favorite-rikishis-by-user-id [db user-id])
-  (fav-rikishi [db user-id rikishi-id])
-  (unfav-rikishi [db user-id rikishi-id])
-  (find-rikishis [db before after first last])
-  (create-torikumi [db torikumi])
-  (get-torikumis [db user-id n]))
+  (find-user-by-mail [this mail])
+  (find-client-by-id [this client-id])
+  (find-rikishi-by-id [this id])
+  (find-rikishi-by-shikona [this shikona])
+  (find-rikishis-by-sumobeya-id [this sumobeya-id])
+  (create-rikishi [this rikishi])
+  (find-sumobeya-by-id [this id])
+  (find-sumobeya-by-rikishi-id [this rikishi-id])
+  (find-favorite-rikishis-by-user-id [this user-id])
+  (fav-rikishi [this user-id rikishi-id])
+  (unfav-rikishi [this user-id rikishi-id])
+  (find-rikishis [this before after first last])
+  (create-torikumi [this torikumi])
+  (find-torikumis [this user-id n]))
 
 (defn database?
   [db]
@@ -34,7 +34,7 @@
 
 (extend-protocol IDatabase
   duct.database.datomic.Boundary
-  (get-user-by-mail [{:keys [connection]} mail]
+  (find-user-by-mail [{:keys [connection]} mail]
     (-> (d/db connection)
         (d/pull '[*] [:user/email-address mail])
         (->entity)))
@@ -157,7 +157,7 @@
                                       :kimarite (keyword "kimarite" (clojure.string/lower-case kimarite))})]
       (let [_ @(d/transact connection [torikumi])]
         (->entity torikumi))))
-  (get-torikumis [{:keys [connection]} user-id n]
+  (find-torikumis [{:keys [connection]} user-id n]
     (let [db (d/db connection)
           torikumis (->> (d/q '[:find ?e
                                 :in $ ?user
@@ -182,34 +182,7 @@
       (map ->entity torikumis))))
 
 (comment
-  (count
-   (find-favorite-rikishis-by-user-id (:duct.database/datomic integrant.repl.state/system)
-                                      0))
-
-  (create-torikumi (:duct.database/datomic integrant.repl.state/system)
-                   {:higashi 1
-                    :nishi 2
-                    :shiroboshi 3
-                    :kimarite "OSHIDASHI"})
-
-  (count (fav-rikishi (:duct.database/datomic integrant.repl.state/system)
-                      0 11))
-  (count (unfav-rikishi (:duct.database/datomic integrant.repl.state/system)
-                        0 11))
-
-  (let [db (-> (:duct.database/datomic integrant.repl.state/system)
-               :connection
-               d/db)
-        ids
-        (->> db
-             (d/q '[:find ?e
-                    :where [?e :torikumi/higashi]])
-             (sort-by first))]
-    ids)
-
-  (split-with (partial == 3) [1 2 3 4 5])
-  (take-while zero? [-2 -1 0 1 2 3])
-
-  (d/pull (d/db (:connection ))
-          '[*] )
+  (-> (:duct.database/datomic integrant.repl.state/system)
+      (find-favorite-rikishis-by-user-id  0)
+      (clojure.pprint/pprint))
   )

@@ -122,10 +122,10 @@
                                                       ^Integer sumobeya-id]
   ^{:type rikishi
     :cardinality [0 n]
-    :lacinia/resolve :fav-rikishi}　fav-rikishi [^Integer rikishi-id]
+    :lacinia/resolve :fav-rikishi} fav-rikishi [^Integer rikishi-id]
   ^{:type rikishi
     :cardinality [0 n]
-    :lacinia/resolve :unfav-rikishi}　unfav-rikishi [^Integer rikishi-id]]
+    :lacinia/resolve :unfav-rikishi} unfav-rikishi [^Integer rikishi-id]]
  ^:lacinia/subscription
  SubscriptionRoot
  [^{:type torikumi

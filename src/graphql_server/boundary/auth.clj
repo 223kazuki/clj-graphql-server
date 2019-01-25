@@ -13,14 +13,14 @@
 
 (extend-protocol Auth
   graphql_server.auth.Boundary
-  (new-code [{:keys [:code-cache]} client]
+  (new-code [{:keys [code-cache]} client]
     (let [code (generate-uuid)]
       (swap! code-cache assoc code {:client client :used? false})
       code))
-  (new-token [{:keys [:code-cache :token-cache :refresh-token-cache
-                      :token-cache-expire]}
+  (new-token [{:keys [code-cache token-cache refresh-token-cache]
+               {:keys [token-cache-expire]} :opts}
               code client-id redirect-uri]
-    (when-let [{:keys [:client :used? :access-token]}
+    (when-let [{:keys [client used? access-token]}
                (cache/lookup @code-cache code)]
       (when (and (= (:client_id client) client-id)
                  (= (:redirect_uri client) redirect-uri))
@@ -39,11 +39,11 @@
             (swap! code-cache update-in [code]
                    #(assoc % :used? true :access-token access-token))
             access-token)))))
-  (update-token [{:keys [:code-cache :token-cache :refresh-token-cache
-                         :token-cache-expire]}
+  (update-token [{:keys [code-cache token-cache refresh-token-cache]
+                  {:keys [token-cache-expire]} :opts}
                  refresh-token]
-    (when-let [{:keys [:access-token]} (cache/lookup @refresh-token-cache refresh-token)]
-      (when-let [{:keys [:client]} (cache/lookup @token-cache access-token)]
+    (when-let [{:keys [access-token]} (cache/lookup @refresh-token-cache refresh-token)]
+      (when-let [{:keys [client]} (cache/lookup @token-cache access-token)]
         (swap! token-cache dissoc access-token)
         (swap! refresh-token-cache dissoc refresh-token)
         (let [access-token  (generate-uuid)
@@ -55,5 +55,5 @@
           (swap! refresh-token-cache update-in [refresh-token]
                  #(assoc % :access-token access-token))
           access-token))))
-  (get-auth [{:keys [:token-cache]} access-token]
+  (get-auth [{:keys [token-cache]} access-token]
     (cache/lookup @token-cache access-token)))

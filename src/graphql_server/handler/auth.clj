@@ -9,7 +9,7 @@
   (:import
    (org.eclipse.jetty.websocket.api UpgradeRequest UpgradeResponse)))
 
-(defn- login-form [{error :error {:keys [:username]} :form}]
+(defn- login-form [{error :error {:keys [username]} :form}]
   {:status 200 :headers {"Content-Type" "text/html"}
    :body
    (html5
@@ -148,7 +148,7 @@
         (login-form {:error "Invalid application." :username username})))))
 
 (defmethod ig/init-key ::token [_ {:keys [db auth]}]
-  (fn [{:keys [:params] :as req}]
+  (fn [{:keys [params] :as req}]
     (let [{:keys [grant_type code redirect_uri client_id refresh_token]} params]
       (case grant_type
         "authorization_code"
@@ -183,7 +183,7 @@
         {:status 400 :body "unsupported_grant_type"}))))
 
 (defmethod ig/init-key ::introspect [_ {:keys [db auth]}]
-  (fn [{:keys [:params] :as req}]
+  (fn [{:keys [params] :as req}]
     (let [{:keys [token token_type_hint]} params
           {:keys [client] :as token-info} (auth/get-auth auth token)]
       {:status 200 :body (json/write-str {:active     (some? token-info)

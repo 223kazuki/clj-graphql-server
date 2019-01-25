@@ -2,15 +2,13 @@
   (:require [integrant.core :as ig]
             [clojure.core.cache :as cache]))
 
-(defrecord Boundary [code-cache-expire token-cache-expire refresh-token-cache-expire
-                     code-cache token-cache refresh-token-cache])
+(defrecord Boundary [opts code-cache token-cache refresh-token-cache])
 
 (defmethod ig/init-key :graphql-server/auth [_ {:keys [code-cache-expire
                                                        token-cache-expire
-                                                       refresh-token-cache-expire]}]
-  (Boundary. code-cache-expire
-             token-cache-expire
-             refresh-token-cache-expire
+                                                       refresh-token-cache-expire]
+                                                :as opts}]
+  (Boundary. opts
              (atom (cache/ttl-cache-factory {} :ttl code-cache-expire))
              (atom (cache/ttl-cache-factory {} :ttl token-cache-expire))
              (atom (cache/ttl-cache-factory {} :ttl refresh-token-cache-expire))))

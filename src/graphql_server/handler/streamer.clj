@@ -1,21 +1,21 @@
 (ns graphql-server.handler.streamer
   (:require [integrant.core :as ig]
             [clojure.core.async :refer [pub sub chan go-loop go >! <!
-                                        timeout close! >!! <!! unsub] :as async]
+                                        timeout close! >!! <!! unsub]]
             [graphql-server.boundary.db :as db]))
 
 (defmethod ig/init-key ::stream-torikumis [_ {:keys [db channel]}]
   (fn [{request :request :as ctx} {:keys [num]}  source-stream]
     (println "Start subscription.")
     (let [{:keys [id]} (get-in request [:auth-info :client :user])
-          torikumis (db/get-torikumis db id num)]
+          torikumis (db/find-torikumis db id num)]
       (source-stream torikumis)
       (let [{:keys [publication]} channel
             subscription (chan)]
         (sub publication :torikumi/updated subscription)
         (go-loop []
           (when-let [{:keys [data]} (<! subscription)]
-            (let [torikumis (db/get-torikumis db id num)]
+            (let [torikumis (db/find-torikumis db id num)]
               (println "Subscription received data" data)
               (source-stream torikumis)
               (recur))))

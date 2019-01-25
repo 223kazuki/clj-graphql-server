@@ -19,9 +19,9 @@
    :enter (fn [context] context)
    :leave (fn [context] context)})
 
-(defmethod ig/init-key ::auth [_ {:keys [:auth]}]
+(defmethod ig/init-key ::auth [_ {:keys [auth]}]
   {:name  ::auth
-   :enter (fn [{{:keys [:headers :uri :request-method] :as request} :request :as context}]
+   :enter (fn [{{:keys [headers uri request-method] :as request} :request :as context}]
             (let [forbidden-response {:status 403
                                       :headers {"Content-Type" "application/json"
                                                 "Access-Control-Allow-Origin" (get headers "origin")}

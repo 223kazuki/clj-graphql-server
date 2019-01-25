@@ -12,7 +12,7 @@
                                                                     query-parser-interceptor
                                                                     execute-operation-interceptor]]))
 
-(defmethod ig/init-key ::schema [_ {:keys [:meta-db]}]
+(defmethod ig/init-key ::schema [_ {:keys [meta-db]}]
   (-> meta-db
       hodur-lacinia/schema))
 
