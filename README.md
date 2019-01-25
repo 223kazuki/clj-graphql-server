@@ -8,6 +8,8 @@ Exmaple clojure graphql server. It uses following technology stacks.
 * OAuth2 ... Token based authentication for web API.
 * datomic ... A transactional database.
 
+It works with https://github.com/223kazuki/clj-graphql-client.
+
 ## Developing
 
 ### Setup
