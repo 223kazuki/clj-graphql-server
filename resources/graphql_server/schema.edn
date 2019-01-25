@@ -18,9 +18,9 @@
     :datomic/unique :db.unique/identity} id
   ^String name
   ^{:type rikishi
+    :spec/tag false
     :cardinality [0 n]
     :datomic/tag false
-    :spec/tag false
     :lacinia/resolve :sumobeya-rikishis} rikishis]
 
  torikumi
@@ -57,8 +57,8 @@
   ^{:type String
     :lacinia/tag false} password
   ^{:type rikishi
-    :cardinality [0 n]
     :spec/tag false
+    :cardinality [0 n]
     :lacinia/resolve :user-favorite-rikishis} favorite-rikishis]
 
  ^{:lacinia/tag false}
@@ -96,15 +96,20 @@
  [^{:type user
     :lacinia/resolve :get-viewer} viewer []
   ^{:type sumobeya
+    :spec/tag false
     :lacinia/resolve :get-sumobeya} sumobeya [^{:type Integer} id]
   ^{:type rikishi
+    :spec/tag false
     :cardinality [0 n]
     :lacinia/resolve :get-favorite-rikishis} favorite-rikishis []
   ^{:type rikishi
+    :spec/tag false
     :lacinia/resolve :get-rikishi} rikishi [^{:type Integer} id]
   ^{:type rikishi
+    :spec/tag false
     :lacinia/resolve :get-rikishi-by-shikona} rikishi-by-shikona [^{:type String} shikona]
   ^{:type rikishi-connection
+    :spec/tag false
     :lacinia/resolve :get-rikishis} rikishis [^{:type Integer
                                                 :optional true} first
                                               ^{:type String
@@ -116,14 +121,17 @@
  ^:lacinia/mutation
  MutationRoot
  [^{:type rikishi
+    :spec/tag false
     :lacinia/resolve :create-rikishi} create-rikishi [^String shikona
                                                       ^String banduke
                                                       ^String syusshinchi
                                                       ^Integer sumobeya-id]
   ^{:type rikishi
+    :spec/tag false
     :cardinality [0 n]
     :lacinia/resolve :fav-rikishi} fav-rikishi [^Integer rikishi-id]
   ^{:type rikishi
+    :spec/tag false
     :cardinality [0 n]
     :lacinia/resolve :unfav-rikishi} unfav-rikishi [^Integer rikishi-id]]
  ^:lacinia/subscription

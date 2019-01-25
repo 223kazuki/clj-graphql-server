@@ -40,4 +40,5 @@
                                    [eftest "0.5.4"]
                                    [kerodon "0.9.0"]
                                    [alembic "0.3.2"]
-                                   [hodur/visualizer-schema "0.1.1"]]}})
+                                   [hodur/visualizer-schema "0.1.1"]
+                                   [orchestra "2018.12.06-2"]]}})

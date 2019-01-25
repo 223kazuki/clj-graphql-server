@@ -12,11 +12,10 @@
                     rikishi
                     (recur (:node (rand-nth (:edges rikishis))))))
           torikumi (db/create-torikumi db
-                                       {:higashi (:id higashi)
-                                        :nishi (:id nishi)
+                                       {:higashi higashi
+                                        :nishi nishi
                                         :shiroboshi (if (rand-nth [true false])
-                                                      (:id higashi)
-                                                      (:id nishi))
+                                                      higashi nishi)
                                         :kimarite (rand-nth ["TSUKIDASHI" "TSUKITAOSHI" "OSHIDASHI" "OSHITAOSHI" "YORIKIRI" "YORITAOSHI" "ABISETAOSHI" "UWATENAGE" "SHITATENAGE" "KOTENAGE"
                                                              "SUKUINAGE" "UWATEDASHINAGE" "SHITATEDASHINAGE" "KOSHINAGE" "KUBINAGE" "IPPONZEOI" "NICHONAGE" "YAGURANAGE" "KAKENAGE"
                                                              "TSUKAMINAGE" "UCHIGAKE" "SOTOGAKE" "CHONGAKE" "KIRIKAESHI" "KAWAZUGAKE" "KEKAESHI" "KETAGURI" "MITOKOROZEME" "WATASHIKOMI"

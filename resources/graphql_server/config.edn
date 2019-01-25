@@ -19,7 +19,6 @@
   :graphql-server/hodur {:schema #duct/include "graphql_server/schema"}
   :graphql-server.datomic/schema {:meta-db #ig/ref :graphql-server/hodur}
   :graphql-server.lacinia/schema {:meta-db #ig/ref :graphql-server/hodur}
-  :graphql-server/spec {:meta-db #ig/ref :graphql-server/hodur}
 
   :graphql-server.lacinia/service
   {:port #duct/env ["PORT" Int :or 8080]

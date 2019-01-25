@@ -44,7 +44,7 @@
         (->entity)))
   (find-rikishi-by-id [{:keys [connection]} id]
     (-> (d/db connection)
-        (d/pull '[*] [:rikishi/id id])
+        (d/pull '[* {:rikishi/sumobeya [:sumobeya/id]}] [:rikishi/id id])
         (->entity)))
   (find-rikishi-by-shikona [{:keys [connection]} shikona]
     (let [db (d/db connection)]
@@ -54,7 +54,7 @@
                   [?e :rikishi/shikona ?shikona]]
                 db shikona)
            (map first)
-           (d/pull-many db '[*])
+           (d/pull-many db '[* {:rikishi/sumobeya [:sumobeya/id]}])
            first
            (->entity))))
   (find-rikishis-by-sumobeya-id [{:keys [connection]} sumobeya-id]
@@ -65,7 +65,7 @@
                   [?e :rikishi/sumobeya ?sumobeya]]
                 db [:sumobeya/id sumobeya-id])
            (map first)
-           (d/pull-many db '[*])
+           (d/pull-many db '[* {:rikishi/sumobeya [:sumobeya/id]}])
            (map ->entity))))
   (create-rikishi [{:keys [connection]} rikishi]
     (let [db (d/db connection)
@@ -80,8 +80,9 @@
                                      :shikona shikona
                                      :banduke banduke
                                      :syusshinchi syusshinchi
-                                     :sumobeya [:sumobeya/id sumobeya-id]})]
-      (d/transact connection [rikishi])
+                                     :sumobeya [:sumobeya/id sumobeya-id]})
+          {:keys [db-after]} @(d/transact connection [rikishi])
+          rikishi (d/pull db-after '[* {:rikishi/sumobeya [:sumobeya/id]}] [:rikishi/id id])]
       (->entity rikishi)))
   (find-sumobeya-by-id [{:keys [connection]} id]
     (-> (d/db connection)
@@ -102,14 +103,18 @@
     (let [{:keys [db-after]} @(d/transact connection
                                           [[:db/add [:user/id user-id] :user/favorite-rikishis [:rikishi/id rikishi-id]]])
           rikishis (-> db-after
-                       (d/pull '[{:user/favorite-rikishis [*]}] [:user/id user-id])
+                       (d/pull '[{:user/favorite-rikishis
+                                  [* {:rikishi/sumobeya [:sumobeya/id]}]}]
+                               [:user/id user-id])
                        :user/favorite-rikishis)]
       (map ->entity rikishis)))
   (unfav-rikishi [{:keys [connection] :as db} user-id rikishi-id]
     (let [{:keys [db-after]} @(d/transact connection
                                           [[:db/retract [:user/id user-id] :user/favorite-rikishis [:rikishi/id rikishi-id]]])
           rikishis (-> db-after
-                       (d/pull '[{:user/favorite-rikishis [*]}] [:user/id user-id])
+                       (d/pull '[{:user/favorite-rikishis
+                                  [* {:rikishi/sumobeya [:sumobeya/id]}]}]
+                               [:user/id user-id])
                        :user/favorite-rikishis)]
       (map ->entity rikishis)))
   (find-rikishis [{:keys [connection]} before after first-n last-n]
@@ -151,12 +156,22 @@
                  inc)
           torikumi (->namespaced-map "torikumi"
                                      {:id id
-                                      :higashi [:rikishi/id higashi]
-                                      :nishi [:rikishi/id nishi]
-                                      :shiroboshi [:rikishi/id shiroboshi]
+                                      :higashi [:rikishi/id (:id higashi)]
+                                      :nishi [:rikishi/id (:id nishi)]
+                                      :shiroboshi [:rikishi/id (:id shiroboshi)]
                                       :kimarite (keyword "kimarite" (clojure.string/lower-case kimarite))})]
-      (let [_ @(d/transact connection [torikumi])]
-        (->entity torikumi))))
+      (let [{:keys [db-after]} @(d/transact connection [torikumi])
+            torikumi (-> db-after
+                         (d/pull '[* {:torikumi/kimarite [:db/ident]}
+                                   {:torikumi/higashi [:rikishi/id]}
+                                   {:torikumi/nishi [:rikishi/id]}
+                                   {:torikumi/shiroboshi [:rikishi/id]}]
+                                 [:torikumi/id id])
+                         (update-in [:torikumi/kimarite] (comp clojure.string/upper-case
+                                                               name
+                                                               :db/ident))
+                         ->entity)]
+        torikumi)))
   (find-torikumis [{:keys [connection]} user-id n]
     (let [db (d/db connection)
           torikumis (->> (d/q '[:find ?e
