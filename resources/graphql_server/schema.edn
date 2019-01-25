@@ -24,7 +24,9 @@
     :lacinia/resolve :sumobeya-rikishis} rikishis]
 
  torikumi
- [^rikishi higashi
+ [^{:type Integer
+    :datomic/unique :db.unique/identity} id
+  ^rikishi higashi
   ^rikishi nishi
   ^rikishi shiroboshi
   ^kimarite kimarite]

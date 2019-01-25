@@ -25,7 +25,8 @@
   (fav-rikishi [db user-id rikishi-id])
   (unfav-rikishi [db user-id rikishi-id])
   (find-rikishis [db before after first last])
-  (create-torikumi [db torikumi]))
+  (create-torikumi [db torikumi])
+  (get-torikumis [db user-id n]))
 
 (defn database?
   [db]
@@ -141,13 +142,39 @@
   (create-torikumi [{:keys [connection]} torikumi]
     (let [db (d/db connection)
           {:keys [higashi nishi shiroboshi kimarite]} torikumi
+          id (-> (d/q '[:find (max ?id)
+                        :where
+                        [?e :torikumi/id ?id]]
+                      db)
+                 first first
+                 (or 0)
+                 inc)
           torikumi (->namespaced-map "torikumi"
-                                     {:higashi [:rikishi/id higashi]
+                                     {:id id
+                                      :higashi [:rikishi/id higashi]
                                       :nishi [:rikishi/id nishi]
                                       :shiroboshi [:rikishi/id shiroboshi]
                                       :kimarite (keyword "kimarite" (clojure.string/lower-case kimarite))})]
       (let [_ @(d/transact connection [torikumi])]
-        (->entity torikumi)))))
+        (->entity torikumi))))
+  (get-torikumis [{:keys [connection]} user-id n]
+    (let [db (d/db connection)
+          torikumis (->> (d/q '[:find ?e
+                                :in $ ?user
+                                :where (or (and [?e :torikumi/higashi ?higashi]
+                                                [?e :torikumi/nishi ?nishi]
+                                                [?user :user/favorite-rikishis ?higashi])
+                                           (and [?e :torikumi/higashi ?higashi]
+                                                [?e :torikumi/nishi ?nishi]
+                                                [?user :user/favorite-rikishis ?nishi]))]
+                              db [:user/id user-id])
+                         (take-last n)
+                         (map first)
+                         (d/pull-many db '[:torikumi/id {:torikumi/kimarite [:db/ident]}])
+                         (map #(update-in % [:torikumi/kimarite] (comp clojure.string/upper-case
+                                                                       name
+                                                                       :db/ident))))]
+      (map ->entity torikumis))))
 
 (comment
   (count
