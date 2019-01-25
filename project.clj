@@ -6,7 +6,7 @@
                  [duct/core "0.7.0"]
                  [duct/module.logging "0.4.0"]
                  [duct/module.web "0.7.0"]
-                 [duct.module.pedestal "2.0.0"]
+                 [duct.module.pedestal "2.0.1"]
                  [duct/scheduler.simple "0.1.0"]
                  [com.datomic/datomic-free "0.9.5697" :exclusions [com.google.guava/guava]]
 
@@ -20,10 +20,10 @@
                  [com.walmartlabs/lacinia-pedestal "0.11.0"]
 
                  [hodur/engine "0.1.5"]
-                 [hodur/lacinia-schema "0.1.1"]
+                 [hodur/lacinia-schema "0.1.2"]
                  [hodur/datomic-schema "0.1.0"]
                  [hodur/spec-schema "0.1.0"]]
-  :plugins [[duct/lein-duct "0.11.0"]]
+  :plugins [[duct/lein-duct "0.11.2"]]
   :main ^:skip-aot graphql-server.main
   :resource-paths ["resources" "target/resources"]
   :clean-targets ^{:protect false} ["target" "resources/public/cljs-out"]

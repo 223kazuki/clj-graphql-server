@@ -21,7 +21,7 @@
                 :redirect_uri "http://localhost:3000/cb"
                 :explicit-redirect-uri? true
                 :scope "DEFAULT"
-                :user {:id 0 :email-address "rixi223.kazuki@gmail.com"}}}
+                :user {:id 0 :email-address "test@example.com"}}}
 
  :duct.migrator/datomic {:migrations [#ig/ref :graphql-server.migration/test-client
                                       #ig/ref :graphql-server.migration/test-sumobeya
@@ -30,9 +30,7 @@
 
  [:duct.migrator.datomic/transactions :graphql-server.migration/test-client]
  {:up [{:user/id 0 :user/email-address "test@example.com" :user/password "bcrypt+sha512$be56e562199786db653be0826da93320$12$952a3e4c7b286cce6765750d98adc5756f758118c3d6c4e6"
-        :user/favorite-rikishis [[:rikishi/id 1]
-                                 [:rikishi/id 2]
-                                 [:rikishi/id 3]]}]}
+        :user/favorite-rikishis []}]}
 
  [:duct.migrator.datomic/transactions :graphql-server.migration/test-user]
  {:up [{:client/client-id "fe6af238-20ca-4682-a50c-630092edddc9" :client/client-secret "1e40afe0-2f52-421e-9f26-ef93482c9369" :client/client-type "PUBLIC" :client/redirect-uris "http://localhost:3000/cb" :client/application-name "Clj GraphQL Client" :client/application-type "WEB"}]}
