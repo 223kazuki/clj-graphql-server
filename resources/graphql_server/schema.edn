@@ -26,9 +26,15 @@
  torikumi
  [^{:type Integer
     :datomic/unique :db.unique/identity} id
-  ^rikishi higashi
-  ^rikishi nishi
-  ^rikishi shiroboshi
+  ^{:type rikishi
+    :spec/tag false
+    :lacinia/resolve :torikumi-higashi-rikishi} higashi
+  ^{:type rikishi
+    :spec/tag false
+    :lacinia/resolve :torikumi-nishi-rikishi} nishi
+  ^{:type rikishi
+    :spec/tag false
+    :lacinia/resolve :torikumi-shiroboshi-rikishi} shiroboshi
   ^kimarite kimarite]
 
  ^{:enum true}

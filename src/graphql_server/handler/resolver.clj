@@ -94,3 +94,21 @@
                        ->lacinia
                        (update-in [:edges] #(map ->lacinia %)))]
       rikishis)))
+
+(defmethod ig/init-key ::torikumi-higashi-rikishi [_ {:keys [db]}]
+  (fn [ctx args torikumi]
+    (let [{{:keys [id]} :higashi} torikumi
+          rikishi (db/find-rikishi-by-id db id)]
+      (->lacinia rikishi))))
+
+(defmethod ig/init-key ::torikumi-nishi-rikishi [_ {:keys [db]}]
+  (fn [ctx args torikumi]
+    (let [{{:keys [id]} :nishi} torikumi
+          rikishi (db/find-rikishi-by-id db id)]
+      (->lacinia rikishi))))
+
+(defmethod ig/init-key ::torikumi-shiroboshi-rikishi [_ {:keys [db]}]
+  (fn [ctx args torikumi]
+    (let [{{:keys [id]} :shiroboshi} torikumi
+          rikishi (db/find-rikishi-by-id db id)]
+      (->lacinia rikishi))))

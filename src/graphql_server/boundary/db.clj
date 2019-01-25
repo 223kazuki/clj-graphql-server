@@ -168,9 +168,14 @@
                                                 [?e :torikumi/nishi ?nishi]
                                                 [?user :user/favorite-rikishis ?nishi]))]
                               db [:user/id user-id])
-                         (take-last n)
                          (map first)
-                         (d/pull-many db '[:torikumi/id {:torikumi/kimarite [:db/ident]}])
+                         (sort)
+                         (take-last n)
+                         (reverse)
+                         (d/pull-many db '[* {:torikumi/kimarite [:db/ident]}
+                                           {:torikumi/higashi [:rikishi/id]}
+                                           {:torikumi/nishi [:rikishi/id]}
+                                           {:torikumi/shiroboshi [:rikishi/id]}])
                          (map #(update-in % [:torikumi/kimarite] (comp clojure.string/upper-case
                                                                        name
                                                                        :db/ident))))]
