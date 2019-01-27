@@ -101,7 +101,7 @@
                                  client_id
                                  client
                                  (get-redirect-uri redirect_uri response_type client))]
-        (let [user (db/get-user-by-mail db username)]
+        (let [user (db/find-user-by-mail db username)]
           (case response_type
             "code"
             (cond
