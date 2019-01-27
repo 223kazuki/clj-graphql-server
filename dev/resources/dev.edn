@@ -7,6 +7,7 @@
  {:code-cache-expire 9999999999
   :token-cache-expire 9999999999
   :refresh-token-cache-expire 9999999999}
+
  :graphql-server/spec {:meta-db #ig/ref :graphql-server/hodur}
 
  :graphql-server.lacinia/service

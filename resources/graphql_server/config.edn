@@ -1,28 +1,25 @@
 {:duct.profile/base
  {:duct.core/project-ns graphql-server
 
-  :duct.scheduler/simple
-  {:jobs [{:interval 10 :run #ig/ref :graphql-server/dohyo}]}
+  :duct.scheduler/simple {:jobs [{:interval 10 :run #ig/ref :graphql-server/dohyo}]}
+  :duct.server/pedestal {:service #ig/ref :graphql-server.lacinia/service}
+  :duct.migrator/datomic {:schema #ig/ref :graphql-server.datomic/schema}
 
   :graphql-server/dohyo {:db #ig/ref :duct.database/datomic
                          :channel #ig/ref :graphql-server/channel}
-
   :graphql-server/auth
   {:code-cache-expire #duct/env ["CODE_CACHE_EXPIRE" Int :or 600000]
    :token-cache-expire #duct/env ["TOKEN_CACHE_EXPIRE" Int :or 600000]
    :refresh-token-cache-expire #duct/env ["REFRESH_TOKEN_CACHE_EXPIRE" Int :or 600000]}
   :graphql-server/channel {}
 
-  :duct.server/pedestal {:service #ig/ref :graphql-server.lacinia/service}
-  :duct.migrator/datomic {:schema #ig/ref :graphql-server.datomic/schema}
-
   :graphql-server/hodur {:schema #duct/include "graphql_server/schema"}
   :graphql-server.datomic/schema {:meta-db #ig/ref :graphql-server/hodur}
   :graphql-server.lacinia/schema {:meta-db #ig/ref :graphql-server/hodur}
-
   :graphql-server.lacinia/service
   {:port #duct/env ["PORT" Int :or 8080]
    :subscriptions true
+   :keep-alive-ms 10000
    :init-context #ig/ref :graphql-server.handler.auth/ws-init-context
    :optional-interceptors [#ig/ref :graphql-server.interceptor/auth]
    :optional-routes
@@ -73,11 +70,11 @@
   :graphql-server.handler.resolver/fav-rikishi {:auth #ig/ref :graphql-server/auth :db #ig/ref :duct.database/datomic}
   :graphql-server.handler.resolver/unfav-rikishi {:auth #ig/ref :graphql-server/auth :db #ig/ref :duct.database/datomic}
   :graphql-server.handler.resolver/get-rikishis {:db #ig/ref :duct.database/datomic}
-  :graphql-server.handler.streamer/stream-torikumis {:db #ig/ref :duct.database/datomic
-                                                     :channel #ig/ref :graphql-server/channel}
   :graphql-server.handler.resolver/torikumi-higashi-rikishi {:db #ig/ref :duct.database/datomic}
   :graphql-server.handler.resolver/torikumi-nishi-rikishi {:db #ig/ref :duct.database/datomic}
-  :graphql-server.handler.resolver/torikumi-shiroboshi-rikishi {:db #ig/ref :duct.database/datomic}}
+  :graphql-server.handler.resolver/torikumi-shiroboshi-rikishi {:db #ig/ref :duct.database/datomic}
+  :graphql-server.handler.streamer/stream-torikumis {:db #ig/ref :duct.database/datomic
+                                                     :channel #ig/ref :graphql-server/channel}}
 
  :duct.profile/dev   #duct/include "dev"
  :duct.profile/local #duct/include "local"
