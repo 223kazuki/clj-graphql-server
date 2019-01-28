@@ -5,7 +5,7 @@
             [graphql-server.boundary.db :as db]))
 
 (defmethod ig/init-key ::stream-torikumis [_ {:keys [db channel]}]
-  (fn [{request :request :as ctx} {:keys [num]}  source-stream]
+  (fn [{request :request :as ctx} {:keys [num]} source-stream]
     (println "Start subscription.")
     (let [{:keys [id]} (get-in request [:auth-info :client :user])
           torikumis (db/find-torikumis db id num)]

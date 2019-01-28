@@ -126,24 +126,24 @@
                           :where [?e :rikishi/id]])
                    (sort-by first)
                    (map first))
-          _edges (cond->> ids
-                   after (filter #(> % after))
-                   before (filter #(< % before)))
-          edges (cond->> _edges
-                  first-n (take first-n)
-                  last-n (take-last last-n)
-                  true (d/pull-many db '[*])
-                  true (map #(hash-map :cursor (encode-str (str (:db/id %)))
-                                       :node (->entity %))))
+          edges (cond->> ids
+                  after (filter #(> % after))
+                  before (filter #(< % before)))
+          edges' (cond->> edges
+                   first-n (take first-n)
+                   last-n (take-last last-n)
+                   true (d/pull-many db '[*])
+                   true (map #(hash-map :cursor (encode-str (str (:db/id %)))
+                                        :node (->entity %))))
           page-info (cond-> {:has-next-page false
                              :has-previous-page false}
-                      (and last-n (< last-n (count _edges))) (assoc :has-previous-page true)
+                      (and last-n (< last-n (count edges))) (assoc :has-previous-page true)
                       (and after (not-empty (filter #(> % after) ids))) (assoc :has-previous-page true)
-                      (and first-n (< first-n (count _edges))) (assoc :has-next-page true)
+                      (and first-n (< first-n (count edges))) (assoc :has-next-page true)
                       (and before (not-empty (filter #(< % before) ids))) (assoc :has-next-page true)
-                      true (assoc :start-cursor (:cursor (first edges)))
-                      true (assoc :end-cursor (:cursor (last edges))))]
-      {:total-count (count ids) :page-info page-info :edges edges}))
+                      true (assoc :start-cursor (:cursor (first edges')))
+                      true (assoc :end-cursor (:cursor (last edges'))))]
+      {:total-count (count ids) :page-info page-info :edges edges'}))
   (create-torikumi [{:keys [connection]} torikumi]
     (let [db (d/db connection)
           {:keys [higashi nishi shiroboshi kimarite]} torikumi
