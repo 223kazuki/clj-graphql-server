@@ -10,6 +10,8 @@ Exmaple clojure graphql server. It uses following technology stacks.
 
 It works with https://github.com/223kazuki/clj-graphql-client.
 
+Please refer to [blog post](https://223kazuki.github.io/lacinia-app-tips.html) to know about this app.
+
 ## Developing
 
 ### Setup
